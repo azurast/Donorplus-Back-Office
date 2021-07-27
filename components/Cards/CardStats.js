@@ -25,31 +25,32 @@ export default function CardStats({
               </span>
             </div>
             <div className="relative w-auto pl-4 flex-initial">
-              <div
-                className={
-                  "text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full " +
-                  statIconColor
-                }
-              >
-                <i className={statIconName}></i>
+              <div className="items-center flex">
+                <span className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+                <img
+                    alt="..."
+                    className="w-full rounded-full align-middle border-none shadow-lg"
+                    src={"/img/redcross/"+statIconName+".png"}
+                />
+                </span>
               </div>
             </div>
           </div>
-          <p className="text-sm text-blueGray-400 mt-4">
-            <span className={statPercentColor + " mr-2"}>
-              <i
-                className={
-                  statArrow === "up"
-                    ? "fas fa-arrow-up"
-                    : statArrow === "down"
-                    ? "fas fa-arrow-down"
-                    : ""
-                }
-              ></i>{" "}
-              {statPercent}%
-            </span>
-            <span className="whitespace-nowrap">{statDescripiron}</span>
-          </p>
+          {/*<p className="text-sm text-blueGray-400 mt-4">*/}
+          {/*  <span className={statPercentColor + " mr-2"}>*/}
+          {/*    <i*/}
+          {/*      className={*/}
+          {/*        statArrow === "up"*/}
+          {/*          ? "fas fa-arrow-up"*/}
+          {/*          : statArrow === "down"*/}
+          {/*          ? "fas fa-arrow-down"*/}
+          {/*          : ""*/}
+          {/*      }*/}
+          {/*    ></i>{" "}*/}
+          {/*    {statPercent}%*/}
+          {/*  </span>*/}
+          {/*  <span className="whitespace-nowrap">{statDescripiron}</span>*/}
+          {/*</p>*/}
         </div>
       </div>
     </>
