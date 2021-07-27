@@ -1,24 +1,24 @@
 import React from "react";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 
 import Admin from "layouts/Admin"
 
-export default function UDD() {
+export default function BloodTest() {
 
     return(
         <div>Test</div>
     );
 }
 
-UDD.layout = Admin;
+BloodTest.layout = Admin;
 
-UDD.defaultProps = {
+BloodTest.defaultProps = {
     color: "light",
-    showCards: false,
-    navigationTitle: "Unit Donor Darah"
+    showCards: true,
+    navigationTitle: "Tes Darah"
 };
 
-UDD.propTypes = {
+BloodTest.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
     showCards: PropTypes.bool,
     navigationTitle: PropTypes.string

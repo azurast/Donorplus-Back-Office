@@ -57,7 +57,7 @@ export default function Dashboard({udds, color}) {
             {/*    </thead>*/}
             {/*    <tbody>*/}
             {/*    {*/}
-            {/*        udds.map((udd) => {*/}
+            {/*        udd.map((udd) => {*/}
             {/*            const { udd_name: uddName } = udd*/}
             {/*            return <tr className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">*/}
             {/*                <td>*/}
@@ -106,7 +106,7 @@ Dashboard.layout = Admin;
 //
 //     return {
 //         props: {
-//             udds: data.getAllUdds,
+//             udd: data.getAllUdds,
 //         },
 //     };
 // }
