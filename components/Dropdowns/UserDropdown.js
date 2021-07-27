@@ -31,7 +31,7 @@ const UserDropdown = () => {
             <img
               alt="..."
               className="w-full rounded-full align-middle border-none shadow-lg"
-              src="/img/team-1-800x800.jpg"
+              src="/img/redcross/red-cross-symbol.png"
             />
           </span>
         </div>
@@ -50,36 +50,37 @@ const UserDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Action
+            <i className={"fas fa-sign-out-alt mr-2 text-sm opacity-75"}></i>
+          Keluar
         </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Another action
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Something else here
-        </a>
-        <div className="h-0 my-2 border border-solid border-blueGray-100" />
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Seprated link
-        </a>
+        {/*<a*/}
+        {/*  href="#pablo"*/}
+        {/*  className={*/}
+        {/*    "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"*/}
+        {/*  }*/}
+        {/*  onClick={(e) => e.preventDefault()}*/}
+        {/*>*/}
+        {/*  Another action*/}
+        {/*</a>*/}
+        {/*<a*/}
+        {/*  href="#pablo"*/}
+        {/*  className={*/}
+        {/*    "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"*/}
+        {/*  }*/}
+        {/*  onClick={(e) => e.preventDefault()}*/}
+        {/*>*/}
+        {/*  Something else here*/}
+        {/*</a>*/}
+        {/*<div className="h-0 my-2 border border-solid border-blueGray-100" />*/}
+        {/*<a*/}
+        {/*  href="#pablo"*/}
+        {/*  className={*/}
+        {/*    "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"*/}
+        {/*  }*/}
+        {/*  onClick={(e) => e.preventDefault()}*/}
+        {/*>*/}
+        {/*  Seprated link*/}
+        {/*</a>*/}
       </div>
     </>
   );

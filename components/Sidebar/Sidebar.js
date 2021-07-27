@@ -83,111 +83,164 @@ export default function Sidebar() {
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Admin Layout Pages
-            </h6>
+            {/*<h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">*/}
+            {/*  Admin Layout Pages*/}
+            {/*</h6>*/}
             {/* Navigation */}
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               <li className="items-center">
-                <Link href="/admin/dashboard">
+                <Link href="/admin/udd">
                   <a
                     href="#pablo"
                     className={
                       "text-xs uppercase py-3 font-bold block " +
-                      (router.pathname.indexOf("/admin/dashboard") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      (router.pathname.indexOf("/admin/udd") !== -1
+                        ? "text-red-500 hover:text-red-600"
                         : "text-blueGray-700 hover:text-blueGray-500")
                     }
                   >
                     <i
                       className={
-                        "fas fa-tv mr-2 text-sm " +
-                        (router.pathname.indexOf("/admin/dashboard") !== -1
+                        "fas fa-plus-square mr-2 text-sm " +
+                        (router.pathname.indexOf("/admin/udd") !== -1
                           ? "opacity-75"
                           : "text-blueGray-300")
                       }
                     ></i>{" "}
-                    Dashboard
+                    UDD
                   </a>
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/admin/settings">
+                <Link href="/admin/donors">
                   <a
                     href="#pablo"
                     className={
                       "text-xs uppercase py-3 font-bold block " +
-                      (router.pathname.indexOf("/admin/settings") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      (router.pathname.indexOf("/admin/donors") !== -1
+                        ? "text-red-500 hover:text-red-600"
                         : "text-blueGray-700 hover:text-blueGray-500")
                     }
                   >
                     <i
                       className={
-                        "fas fa-tools mr-2 text-sm " +
-                        (router.pathname.indexOf("/admin/settings") !== -1
+                        "fas fa-id-card mr-2 text-sm " +
+                        (router.pathname.indexOf("/admin/donors") !== -1
                           ? "opacity-75"
                           : "text-blueGray-300")
                       }
                     ></i>{" "}
-                    Settings
+                    Pendonor
+                  </a>
+                </Link>
+              </li>
+
+              {/* Divider */}
+              <hr className="my-4 md:min-w-full" />
+
+              <li className="items-center">
+                <Link href="/admin/interview">
+                  <a
+                    href="#pablo"
+                    className={
+                      "text-xs uppercase py-3 font-bold block " +
+                      (router.pathname.indexOf("/admin/interview") !== -1
+                        ? "text-red-500 hover:text-red-600"
+                        : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                  >
+                    <i
+                      className={
+                        "fas fa-comment-medical mr-2 text-sm " +
+                        (router.pathname.indexOf("/admin/interview") !== -1
+                          ? "opacity-75"
+                          : "text-blueGray-300")
+                      }
+                    ></i>{" "}
+                    Wawancara
                   </a>
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/admin/tables">
+                <Link href="/admin/blood-test">
                   <a
                     href="#pablo"
                     className={
                       "text-xs uppercase py-3 font-bold block " +
-                      (router.pathname.indexOf("/admin/tables") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      (router.pathname.indexOf("/admin/blood-test") !== -1
+                        ? "text-red-500 hover:text-red-600"
                         : "text-blueGray-700 hover:text-blueGray-500")
                     }
                   >
                     <i
                       className={
-                        "fas fa-table mr-2 text-sm " +
-                        (router.pathname.indexOf("/admin/tables") !== -1
+                        "fas fa-vial mr-2 text-sm " +
+                        (router.pathname.indexOf("/admin/blood-test") !== -1
                           ? "opacity-75"
                           : "text-blueGray-300")
                       }
                     ></i>{" "}
-                    Tables
+                    Tes Darah
                   </a>
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/admin/maps">
+                <Link href="/admin/plasma-donor">
                   <a
-                    href="#pablo"
-                    className={
-                      "text-xs uppercase py-3 font-bold block " +
-                      (router.pathname.indexOf("/admin/maps") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
-                        : "text-blueGray-700 hover:text-blueGray-500")
-                    }
+                      href="#pablo"
+                      className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (router.pathname.indexOf("/admin/plasma-donor") !== -1
+                            ? "text-red-500 hover:text-red-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                      }
                   >
                     <i
-                      className={
-                        "fas fa-map-marked mr-2 text-sm " +
-                        (router.pathname.indexOf("/admin/maps") !== -1
-                          ? "opacity-75"
-                          : "text-blueGray-300")
-                      }
+                        className={
+                          "fas fa-hand-holding-medical mr-2 text-sm " +
+                          (router.pathname.indexOf("/admin/plasma-donor") !== -1
+                              ? "opacity-75"
+                              : "text-blueGray-300")
+                        }
                     ></i>{" "}
-                    Maps
+                    Donor Plasma
+                  </a>
+                </Link>
+              </li>
+
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+
+              <li className="items-center">
+                <Link href="/admin/setting">
+                  <a
+                      href="#pablo"
+                      className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (router.pathname.indexOf("/admin/setting") !== -1
+                            ? "text-red-500 hover:text-red-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                      }
+                  >
+                    <i
+                        className={
+                          "fas fa-cog mr-2 text-sm " +
+                          (router.pathname.indexOf("/admin/setting") !== -1
+                              ? "opacity-75"
+                              : "text-blueGray-300")
+                        }
+                    ></i>{" "}
+                    Pengaturan
                   </a>
                 </Link>
               </li>
             </ul>
 
-            {/*/!* Divider *!/*/}
-            {/*<hr className="my-4 md:min-w-full" />*/}
+
             {/*/!* Heading *!/*/}
             {/*<h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">*/}
             {/*  Auth Layout Pages*/}
