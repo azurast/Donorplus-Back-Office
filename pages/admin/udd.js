@@ -14,8 +14,12 @@ UDD.layout = Admin;
 
 UDD.defaultProps = {
     color: "light",
+    showCards: false,
+    navigationTitle: "Unit Donor Darah"
 };
 
 UDD.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
+    showCards: PropTypes.bool,
+    navigationTitle: PropTypes.string
 };

@@ -14,8 +14,12 @@ BloodTest.layout = Admin;
 
 BloodTest.defaultProps = {
     color: "light",
+    showCards: true,
+    navigationTitle: "Tes Darah"
 };
 
 BloodTest.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
+    showCards: PropTypes.bool,
+    navigationTitle: PropTypes.string
 };

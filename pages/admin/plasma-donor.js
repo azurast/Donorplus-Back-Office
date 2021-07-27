@@ -14,8 +14,12 @@ PlasmaDonor.layout = Admin;
 
 PlasmaDonor.defaultProps = {
     color: "light",
+    showCards: true,
+    navigationTitle: "Donor Plasma"
 };
 
 PlasmaDonor.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
+    showCards: PropTypes.bool,
+    navigationTitle: PropTypes.string
 };

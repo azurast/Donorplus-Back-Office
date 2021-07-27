@@ -14,8 +14,12 @@ Donors.layout = Admin;
 
 Donors.defaultProps = {
     color: "light",
+    showCards: false,
+    navigationTitle: "Pendonor"
 };
 
 Donors.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
+    showCards: PropTypes.bool,
+    navigationTitle: PropTypes.string
 };

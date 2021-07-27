@@ -14,8 +14,13 @@ Interview.layout = Admin;
 
 Interview.defaultProps = {
     color: "light",
+    showCards: true,
+    navigationTitle: "Wawancara"
 };
+
 
 Interview.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
+    showCards: PropTypes.bool,
+    navigationTitle: PropTypes.string
 };

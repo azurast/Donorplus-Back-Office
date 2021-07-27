@@ -2,7 +2,7 @@ import React from "react";
 
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
-export default function Navbar() {
+export default function Navbar( {navbarTitle}) {
   return (
     <>
       {/* Navbar */}
@@ -14,7 +14,7 @@ export default function Navbar() {
             href="#pablo"
             onClick={(e) => e.preventDefault()}
           >
-            Dashboard PMI
+            {!!navbarTitle ? navbarTitle : "Dashboard PMI"}
           </a>
           {/* Form */}
           {/*<form className="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">*/}

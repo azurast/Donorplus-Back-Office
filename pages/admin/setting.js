@@ -14,8 +14,12 @@ Setting.layout = Admin;
 
 Setting.defaultProps = {
     color: "light",
+    showCards: false,
+    navigationTitle: "Pengaturan"
 };
 
 Setting.propTypes = {
     color: PropTypes.oneOf(["light", "dark"]),
+    showCards: PropTypes.bool,
+    navigationTitle: PropTypes.string
 };
