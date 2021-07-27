@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import client from "../apollo-client";
+import client from "../../components/Apollo/apollo-client";
 import {gql} from "@apollo/client";
 
 // components
