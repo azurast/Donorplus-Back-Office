@@ -8,7 +8,7 @@ import HeaderStats from "components/Headers/HeaderStats.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 export default function Admin({ children }) {
-    const { showCards, navigationTitle } = children.props
+  const { showCards, navigationTitle } = children.props
   return (
     <>
       <Sidebar />
