@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
 export default function Sidebar() {
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    setRole(localStorage.getItem("currentUser"));
+  }, [role]);
 
   const router = useRouter();
-  const [role, setRole] = useState(router.query.role);
+
   const [collapseShow, setCollapseShow] = React.useState("hidden");
 
   return (
@@ -75,12 +80,12 @@ export default function Sidebar() {
               { role == "superadminpusat" || role == "superadmincabang" || role == "adminreg"
                 ? <>
                     <li className="items-center">
-                      <Link href={{ pathname: "/admin/udd/udds", query: { role }}}>
+                      <Link href={{ pathname: "/admin/udd", query: { role }}}>
                         <a
                           href="#pablo"
                           className={
                             "text-xs uppercase py-3 font-bold block " +
-                            (router.pathname.indexOf("/admin/udd/udds") !== -1
+                            (router.pathname.indexOf("/admin/udd") !== -1
                               ? "text-red-500 hover:text-red-600"
                               : "text-blueGray-700 hover:text-blueGray-500")
                           }
@@ -88,7 +93,7 @@ export default function Sidebar() {
                           <i
                             className={
                               "fas fa-plus-square mr-2 text-sm " +
-                              (router.pathname.indexOf("/admin/udd/udds") !== -1
+                              (router.pathname.indexOf("/admin/udd") !== -1
                                 ? "opacity-75"
                                 : "text-blueGray-300")
                             }
@@ -232,5 +237,6 @@ export default function Sidebar() {
       </nav>
     </>
   );
+
 }
 

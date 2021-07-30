@@ -3,19 +3,8 @@ import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
 
-const query = gql`
-  query getAllUdd {
-    getAllPmi {
-      id
-      branchName
-      branchSize
-    }
-  }
-`;
-
 export default function UddTable({ color, data }) {
 
-  console.log("===data di table", data);
   const router = useRouter();
   const UddTableHeaderRow = () => {
     return (
@@ -96,7 +85,7 @@ export default function UddTable({ color, data }) {
   const UddTableRow = (props) => {
     const { index, uddName, uddProvince, uddPhone, uddSize, uddAdminCount, uddStatus } = props;
     return (
-      <Link href="/admin/udd/[uddid]" as={`/admin/udd/${uddName}`}>
+      <Link href="/admin/udd/[uddid]" as={`/admin/udd/${index}`}>
         <tr>
           <th
             className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">

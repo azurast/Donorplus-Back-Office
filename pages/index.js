@@ -1,28 +1,40 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router"
-// layout for page
+// import { authenticationService } from "../services/authentication.service";
 
+// layout for page
 import Auth from "layouts/Auth.js";
 
+
+function Redirect({ to }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push(to);
+  }, [to]);
+}
 export default function Index() {
 
-  const router = useRouter()
-  const [redirectPath, setRedirectPath] = useState("udd/udds")
-  const handleLogin = (e) => {
-    // TODO : send admin email & password to server
-    // get server response (role)
-    // use role to determine link hred
-    // TODO : not updated here
-    setRedirectPath("donor/donors")
-    console.log("===redirectPath", redirectPath)
-    router.push({
-      path: `admin/${redirectPath}`,
-      query: {
-        role: "adminreg"
-      }
-    })
+  const login = () => {
+    // TODO : authenticate to BE & return role
+    localStorage.setItem("currentUser", "superadmincabang");
   }
+
+  const router = useRouter()
+  const [redirectPath, setRedirectPath] = useState("udd")
+  const handleLogin = (e) => {
+    e.preventDefault()
+    login();
+    const role = localStorage.getItem("currentUser");
+    /* TODO :
+        - authenticate login, exception handling
+        -determine redirect path based on role
+        */
+    router.push("admin/udd");
+    // router.push({pathname: "admin/udd", query: { role }}, `admin/udd/${role}`);
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -79,16 +91,13 @@ export default function Index() {
                   </div>
 
                   <div className="text-center mt-6">
-                    {/* TODO : href based on role, get role and determine href, pasti pakai async await and use state  */}
-                    <Link href={{ pathname: `admin/${redirectPath}`, query: { role : "superadmincabang"}}}>
                       <button
                         className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                         type="button"
-                        // onClick={handleLogin}
+                        onClick={handleLogin}
                       >
                         Sign In
                       </button>
-                    </Link>
                   </div>
                 </form>
               </div>

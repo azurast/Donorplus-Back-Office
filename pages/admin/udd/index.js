@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types"
 import { gql } from "@apollo/client"
 import client from "../../../apollo-client"
-import App from "next/app"
+import { GET_ALL_UDDS } from "../../../services/graphql/queries/uddQueries";
 
 import Admin from "layouts/Admin"
 import UddTable from "../../../components/UddTable/UddTable";
@@ -33,18 +33,17 @@ Udds.propTypes = {
 
 export async function getServerSideProps() {
   const { data } = await client.query({
-    query: gql`
-      query getAllUdd {
-        getAllPmi {
-          id
-          branchName
-          branchSize
-        }
-      }
-    `
+      query: GET_ALL_UDDS
+    // query: gql`
+    //   query getAllUdd {
+    //     getAllPmi {
+    //       id
+    //       branchName
+    //       branchSize
+    //     }
+    //   }
+    // `
   });
-
-  console.log('===data', data);
 
   return {
     props: {
