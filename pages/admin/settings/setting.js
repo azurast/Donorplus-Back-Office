@@ -2,11 +2,18 @@ import React from "react";
 import PropTypes from "prop-types"
 
 import Admin from "layouts/Admin"
+import SlotTable from "../../../components/Table/SlotTable";
 
 export default function Setting() {
 
     return(
-        <div>Test</div>
+        <div className="flex">
+            <SlotTable/>
+            <SlotTable/>
+            <SlotTable/>
+            <SlotTable/>
+            <SlotTable/>
+        </div>
     );
 }
 

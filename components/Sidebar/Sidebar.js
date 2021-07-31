@@ -103,12 +103,12 @@ export default function Sidebar() {
                       </Link>
                     </li>
                     <li className="items-center">
-                      <Link href={{ pathname: "/admin/donor/donors", query: { role }}}>
+                      <Link href={{ pathname: "/admin/donor", query: { role }}}>
                         <a
                           href="#pablo"
                           className={
                             "text-xs uppercase py-3 font-bold block " +
-                            (router.pathname.indexOf("/admin/donor/donors") !== -1
+                            (router.pathname.indexOf("/admin/donor") !== -1
                               ? "text-red-500 hover:text-red-600"
                               : "text-blueGray-700 hover:text-blueGray-500")
                           }
@@ -116,7 +116,7 @@ export default function Sidebar() {
                           <i
                             className={
                               "fas fa-id-card mr-2 text-sm " +
-                              (router.pathname.indexOf("/admin/donor/donors") !== -1
+                              (router.pathname.indexOf("/admin/donor") !== -1
                                 ? "opacity-75"
                                 : "text-blueGray-300")
                             }

@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client"
+import { gql } from "@apollo/client"
 
 const GET_ALL_UDDS = gql`
   query getAllUdd {
@@ -6,6 +6,7 @@ const GET_ALL_UDDS = gql`
       id
       branchName
       branchSize
+      branchAddress
     }
   }
 `
