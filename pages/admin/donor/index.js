@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types"
-
-import Admin from "layouts/Admin"
-import { useQuery } from "@apollo/client";
-import { GET_ALL_DONORS } from "../../../services/graphql/queries/donorQueries";
+import {useQuery} from "@apollo/client";
+import {GET_ALL_DONORS} from "../../../services/graphql/queries/donorQueries";
 
 // COMPONENTS
+import Admin from "layouts/Admin";
 import TableContainer from "../../../components/Table/TableContainer";
 import Table from "../../../components/Table/Table";
+import TableRow from "../../../components/Table/TableRow";
 import TableTitle from "../../../components/Table/TableTitle";
 import TableHead from "../../../components/Table/TableHead";
 import TableHeader from "../../../components/Table/TableHeader";
@@ -16,78 +16,85 @@ import TableCell from "../../../components/Table/TableCell";
 
 import Link from "next/link";
 
-export default function Index() {
+export default function Donors() {
 
-    const { data, loading, error } = useQuery(GET_ALL_DONORS);
+  const {data, loading, error} = useQuery(GET_ALL_DONORS);
 
-    if (loading) {
-        return <h2>Loading</h2>
-    }
+  if (loading) {
+    return <h2>Loading</h2>
+  }
 
-    if (error) {
-        console.error(error);
-        return null;
-    }
+  if (error) {
+    console.error(error);
+    return null;
+  }
 
-    const donors = data.getAllPendonor;
-    console.log("===donors", donors);
+  const donors = data.getAllPendonor;
+  console.log("===donors", donors);
 
-    const DonorTableRow = (props) => {
-        const { index, uddName, uddProvince, uddPhone, uddSize, uddAdminCount, uddStatus } = props;
-        return (
-          <Link href="/admin/udd/[uddid]" as={`/admin/udd/${index}`}>
-              <tr>
-                  <TableCell label={index} type="text"/>
-                  <TableCell label={uddName} type="text"/>
-                  <TableCell label={uddProvince} type="text"/>
-                  <TableCell label={uddPhone} type="text"/>
-                  <TableCell label={uddSize} type="label"/>
-                  <TableCell label={uddAdminCount} type="text"/>
-                  <TableCell label={uddStatus} type="status"/>
-              </tr>
-          </Link>
-        );
-    }
+  const convertToAge = (dateOfBirth) => {
 
-    return(
-        <div>
-            <TableContainer>
-                <TableTitle
-                    titleText="Daftar Pendonor"
-                    showButton={false}
-                />
-                <Table>
-                    <TableHeader>
-                        <TableHead title="Nomor"/>
-                        <TableHead title="Nama"/>
-                        <TableHead title="Jenis Kelamin"/>
-                        <TableHead title="Golongan Darah"/>
-                        <TableHead title="Umur"/>
-                        <TableHead title="NIK"/>
-                    </TableHeader>
-                    <TableBody>
-                        {
-                            // donors.map(donor => {
-                            //     const {}
-                            // })
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </div>
-    );
+  }
+
+  return (
+    <>
+      <TableContainer>
+        <TableTitle
+          titleText="Daftar Pendonor"
+          showButton={false}
+        />
+        <Table>
+          <TableHeader>
+            <TableHead title="Nomor"/>
+            <TableHead title="Nama"/>
+            <TableHead title="Jenis Kelamin"/>
+            <TableHead title="Golongan Darah"/>
+            <TableHead title="Umur"/>
+            <TableHead title="NIK"/>
+          </TableHeader>
+          <TableBody>
+            {
+              donors.map(donor => {
+                const {id, fullName, pendonorDetails} = donor;
+                const {sex, dateOfBirth, bloodType, nik} = pendonorDetails;
+                const age = dateOfBirth;
+                return (
+                  <Link href={{
+                    pathname: "/admin/donor/[donorid]",
+                    query: { donorid: id }
+                  }}>
+                    <a>
+                      <TableRow key={id}>
+                        <TableCell label="idx" type="text"/>
+                        <TableCell label={fullName} type="text"/>
+                        <TableCell label={sex} type="label"/>
+                        <TableCell label={bloodType} type="label"/>
+                        <TableCell label={age} type="text"/>
+                        <TableCell label={nik} type="text"/>
+                      </TableRow>
+                    </a>
+                  </Link>
+                );
+              })
+            }
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
 }
 
-Index.layout = Admin;
+Donors.layout = Admin;
 
-Index.defaultProps = {
-    color: "light",
-    showCards: false,
-    navigationTitle: "Pendonor"
+Donors.defaultProps = {
+  color: "light",
+  showCards: false,
+  navigationTitle: "Pendonor"
 };
 
-Index.propTypes = {
-    color: PropTypes.oneOf(["light", "dark"]),
-    showCards: PropTypes.bool,
-    navigationTitle: PropTypes.string
+Donors.propTypes = {
+  color: PropTypes.oneOf(["light", "dark"]),
+  showCards: PropTypes.bool,
+  navigationTitle: PropTypes.string
 };
+

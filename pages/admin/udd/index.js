@@ -38,6 +38,10 @@ export default function Udds() {
     setShowModal(!showModal)
   }
 
+  const handleRowClick = (row) => {
+    his
+  }
+
   return(
     <>
       <TableContainer>
@@ -59,16 +63,21 @@ export default function Udds() {
           <TableBody>
             {
               udds.map(udd => {
-                const {index, branchName: uddName, branchAddress: uddProvince, branchSize: uddSize} = udd;
+                const {id, branchName: uddName, branchAddress: uddProvince, branchSize: uddSize} = udd;
                 return (
                   <>
-                    <Link href="/admin/udd/[uddid]" as={`/admin/udd/${index}`}>
-                      <TableRow>
-                        <TableCell label={index} type="text"/>
-                        <TableCell label={uddName} type="text"/>
-                        <TableCell label={uddProvince} type="text"/>
-                        <TableCell label={uddSize} type="label"/>
-                      </TableRow>
+                    <Link href={{
+                      pathname: "/admin/udd/[uddid]",
+                      query: { uddid: id }
+                    }}>
+                      <a>
+                        <TableRow key={id}>
+                          <TableCell label={id} type="text"/>
+                          <TableCell label={uddName} type="text"/>
+                          <TableCell label={uddProvince} type="text"/>
+                          <TableCell label={uddSize} type="label"/>
+                        </TableRow>
+                      </a>
                     </Link>
                   </>
                 )

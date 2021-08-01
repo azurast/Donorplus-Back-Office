@@ -5,10 +5,58 @@ const GET_ALL_DONORS = gql`
     getAllPendonor {
       id
       fullName
-      phoneNumber
-      email
+      pendonorDetails {
+        sex
+        dateOfBirth
+        bloodType
+        nik
+      }
     }
   }
 `
 
-export { GET_ALL_DONORS }
+const GET_DONOR_DETAIL = gql`
+  query getAllDonors($donorId: String!) {
+    getPendonorDetail(pendonorId: $donorId) {
+      pendonor {
+        fullName
+        phoneNumber
+        email
+        activitys {
+          branch {
+            branchName
+          }
+        }
+      }
+      sex
+      dateOfBirth
+      placeOfBirth
+      bloodType
+      nik
+      donorCount
+      domisiliProvinsi
+      domisiliKotKab
+      domisiliKecamatan
+      domisiliKelurahan
+      domisiliAddress
+      riwayatHamil
+      riwayatCovid
+      riwayatKeluhan
+      riwayatKomorbid
+      riwayatVaksin
+      riwayatGejalaKlinis
+      hospitalName
+      pcrPositiveDate
+      pcrPositiveImg
+      pcrNegativeDate
+      pcrNegativeImg
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+export {
+  GET_ALL_DONORS,
+  GET_DONOR_DETAIL
+}
