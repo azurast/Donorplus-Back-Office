@@ -21,6 +21,7 @@ export default function Udds() {
   const router = useRouter();
   const { role } = router.query;
   console.log('===role', role);
+
   const [showModal, setShowModal] = useState(false);
   const { data, loading, error } = useQuery(GET_ALL_UDDS);
 
@@ -33,22 +34,23 @@ export default function Udds() {
     return null;
   }
 
-  const udds = data.getAllPmi
-  console.log('===udds', udds)
-
+  const udds = data.getAllPmi;
 
   const handleShowModal = () => {
     setShowModal(!showModal)
   }
 
-  const onTableRowClick = (id) => {
-    console.log('===kepencet with id', id);
-    router.push({
-      pathname: "/admin/udd/[uddid]",
-      query: {
-        udd: id
-      }
-    }, `/admin/udd/${id}`);
+  const onTableRowClick = (id, uddName) => {
+    if(role === "superadminpusat") {
+      router.push({
+        pathname: "/admin/udd/[uddid]",
+        query: {
+          udd: id,
+          uddName,
+          role
+        }
+      }, `/admin/udd/${id}`);
+    }
   }
 
   return(
@@ -56,7 +58,7 @@ export default function Udds() {
       <TableContainer>
         <TableTitle
           titleText="Daftar Unit Donor Darah"
-          showButton={true}
+          showButton={role === "superadminpusat" ? true : false}
           buttonText="Tambah UDD"
           buttonColor="emerald"
           handleButtonClick={handleShowModal}
@@ -72,13 +74,13 @@ export default function Udds() {
           <TableBody>
             {
               udds.map((udd, index) => {
-                const {id, branchName: uddName, branchAddress: uddProvince, branchSize: uddSize} = udd;
+                const {id, branchName: uddName, branchAddress: uddAddress, branchSize: uddSize} = udd;
                 return (
                   <>
-                    <TableRow key={id} onClick={() => onTableRowClick(id)}>
+                    <TableRow key={id} onClick={() => onTableRowClick(id, uddName)}>
                       <TableCell value={++index} type="text"/>
                       <TableCell value={uddName} type="text"/>
-                      <TableCell value={uddProvince} type="text"/>
+                      <TableCell value={uddAddress} type="text"/>
                       <TableCell value={uddSize} type="label"/>
                       {
                         role == "superadminpusat"

@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types"
 import { Formik, Form } from "formik";
+import { useMutation } from "@apollo/client";
+import { CREATE_UDD } from "../../services/graphql/mutations/uddMutations";
+import { GET_ALL_UDDS } from "../../services/graphql/queries/uddQueries";
 
 // COMPONENTS
 import RegularInput from "../Inputs/RegularInput";
@@ -8,6 +11,17 @@ import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
 
 export default function UddModal({ showModal, setShowModal, mode }) {
+
+  const [createUdd, {data, loading, error}] = useMutation(CREATE_UDD);
+
+  if (loading) {
+    return <h2>Loading</h2>
+  }
+
+  if (error) {
+    console.error(error)
+    return null;
+  }
 
   return (
     <>
@@ -21,10 +35,23 @@ export default function UddModal({ showModal, setShowModal, mode }) {
                 uddName: '',
                 uddPhoneNumber: '',
                 uddAddress: '',
+                uddLangitude: '',
+                uddLongitude: '',
                 uddStatus: false
               }}
               onSubmit={(values, { setSubmitting }) => {
-                alert(JSON.stringify(values, null, 2));
+                const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddStatus } = values;
+                createUdd({
+                  variables: {
+                    branchName: uddName,
+                    branchSize: "Besar",
+                    branchAddress: uddAddress,
+                    langitude: uddLangitude,
+                    longitude: uddLongitude,
+                  },
+                  refetchQueries: [{ query: GET_ALL_UDDS }]
+                });
+                setShowModal(false)
               }}
             >
               <Form>
@@ -61,6 +88,18 @@ export default function UddModal({ showModal, setShowModal, mode }) {
                               name="uddPhoneNumber"
                               label="Nomor Telepon"
                               placeholder="021-xxx-xxx"
+                            />
+                            <RegularInput
+                              inputType="text"
+                              name="uddLangitude"
+                              label="Langitude"
+                              placeholder="0"
+                            />
+                            <RegularInput
+                              inputType="text"
+                              name="uddLongitude"
+                              label="Longitude"
+                              placeholder="0"
                             />
                             <TextareaInput
                               label="Alamat"

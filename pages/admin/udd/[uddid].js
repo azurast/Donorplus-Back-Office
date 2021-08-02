@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types"
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
@@ -14,12 +14,14 @@ import TableHead from "../../../components/Table/TableHead";
 import TableBody from "../../../components/Table/TableBody";
 import TableRow from "../../../components/Table/TableRow";
 import TableCell from "../../../components/Table/TableCell";
-import UddModal from "../../../components/UddModal/UddModal";
+import AdminModal from "../../../components/AdminModal/AdminModal";
 
 export default function UddDetail() {
   const router = useRouter();
-  const { props, uddid } = router.query;
-  console.log('===uddid', uddid);
+  const { props, role, uddid, uddName } = router.query;
+  console.log('===role', role);
+
+  const [showModal, setShowModal] = useState(false);
 
   const { loading, error, data } = useQuery(GET_UDD_ADMINS, {
     variables: { uddId: uddid },
@@ -34,6 +36,10 @@ export default function UddDetail() {
     return null;
   }
 
+  const handleShowModal = () => {
+    setShowModal(!showModal)
+  }
+
   const uddAdmins = data.getAdminPmiByBranch;
   console.log('===uddAdmins')
 
@@ -41,8 +47,11 @@ export default function UddDetail() {
       <>
         <TableContainer>
           <TableTitle
-            titleText="Nama UDD"
-            showButton={false}
+            titleText={uddName}
+            showButton={role === "superadminpusat" ? true : false}
+            buttonText="Tambah Admin"
+            buttonColor="emerald"
+            handleButtonClick={handleShowModal}
           />
           <Table>
             <TableHeader>
@@ -79,6 +88,11 @@ export default function UddDetail() {
             </TableBody>
           </Table>
         </TableContainer>
+        <AdminModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          uddId={uddid}
+          mode="add"/>
       </>
   );
 }

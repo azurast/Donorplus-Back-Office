@@ -21,3 +21,31 @@ const CREATE_UDD = gql`
       }
     }
 `
+const CREATE_ADMIN = gql`
+  mutation createAdmin(
+    $branchId: String!,
+    $fullName: String!,
+    $email: String!,
+    $password: String!,
+    $role: String!,
+    $status: Boolean!
+   ) {
+    addAdminPmi(
+      branchId: $branchId,
+      fullname: $fullName,
+      email: $email,
+      password: $password,
+      role: $role,
+      status: $status
+    ) {
+      fullname
+      email
+      status
+    }
+  }
+`
+
+export {
+  CREATE_UDD,
+  CREATE_ADMIN
+};

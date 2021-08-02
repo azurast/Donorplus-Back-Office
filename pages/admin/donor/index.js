@@ -20,6 +20,9 @@ import Link from "next/link";
 export default function Donors() {
 
   const router = useRouter();
+  const { role } = router.query;
+  console.log('===role', role);
+
   const {data, loading, error} = useQuery(GET_ALL_DONORS);
 
   if (loading) {
