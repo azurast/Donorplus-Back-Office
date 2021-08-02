@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types"
+import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client"
 import { GET_ALL_UDDS } from "../../../services/graphql/queries/uddQueries";
 
@@ -11,13 +12,13 @@ import Table from "../../../components/Table/Table";
 import TableHeader from "../../../components/Table/TableHeader";
 import TableHead from "../../../components/Table/TableHead";
 import TableBody from "../../../components/Table/TableBody";
-import Link from "next/link";
 import TableRow from "../../../components/Table/TableRow";
 import TableCell from "../../../components/Table/TableCell";
 import UddModal from "../../../components/UddModal/UddModal";
 
 export default function Udds() {
 
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const { data, loading, error } = useQuery(GET_ALL_UDDS);
 
@@ -38,8 +39,14 @@ export default function Udds() {
     setShowModal(!showModal)
   }
 
-  const handleRowClick = (row) => {
-    his
+  const onTableRowClick = (id) => {
+    console.log('===kepencet with id', id);
+    router.push({
+      pathname: "/admin/udd/[uddid]",
+      query: {
+        udd: id
+      }
+    }, `/admin/udd/${id}`);
   }
 
   return(
@@ -62,23 +69,16 @@ export default function Udds() {
           </TableHeader>
           <TableBody>
             {
-              udds.map(udd => {
+              udds.map((udd, index) => {
                 const {id, branchName: uddName, branchAddress: uddProvince, branchSize: uddSize} = udd;
                 return (
                   <>
-                    <Link href={{
-                      pathname: "/admin/udd/[uddid]",
-                      query: { uddid: id }
-                    }}>
-                      <a>
-                        <TableRow key={id}>
-                          <TableCell label={id} type="text"/>
-                          <TableCell label={uddName} type="text"/>
-                          <TableCell label={uddProvince} type="text"/>
-                          <TableCell label={uddSize} type="label"/>
-                        </TableRow>
-                      </a>
-                    </Link>
+                    <TableRow key={id} onClick={() => onTableRowClick(id)}>
+                      <TableCell label={++index} type="text"/>
+                      <TableCell label={uddName} type="text"/>
+                      <TableCell label={uddProvince} type="text"/>
+                      <TableCell label={uddSize} type="label"/>
+                    </TableRow>
                   </>
                 )
               })
