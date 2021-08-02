@@ -36,8 +36,8 @@ export default function SlotTable() {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell label="10:00-11:00"/>
-              { isEditing ? <RegularInput size="small" value={5}/> : <TableCell label="5"/>}
+              <TableCell value="10:00-11:00"/>
+              { isEditing ? <RegularInput size="small" value={5}/> : <TableCell value="5"/>}
             </TableRow>
           </TableBody>
         </Table>

@@ -72,12 +72,12 @@ export default function Donors() {
                 const age = dateOfBirth;
                 return (
                   <TableRow key={id} onClick={() => onTableRowClick(id)}>
-                    <TableCell label={++index} type="text"/>
-                    <TableCell label={fullName} type="text"/>
-                    <TableCell label={sex} type="label"/>
-                    <TableCell label={bloodType} type="label"/>
-                    <TableCell label={age} type="text"/>
-                    <TableCell label={nik} type="text"/>
+                    <TableCell value={++index} type="text"/>
+                    <TableCell value={fullName} type="text"/>
+                    <TableCell value={sex} type="label"/>
+                    <TableCell value={bloodType} type="label"/>
+                    <TableCell value={age} type="text"/>
+                    <TableCell value={nik} type="text"/>
                   </TableRow>
                 );
               })

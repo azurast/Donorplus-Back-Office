@@ -11,4 +11,18 @@ const GET_ALL_UDDS = gql`
   }
 `
 
-export { GET_ALL_UDDS }
+const GET_UDD_ADMINS = gql`
+  query getPMIAdmins($uddId: String!) {
+    getAdminPmiByBranch(branchId: $uddId) {
+      id
+      fullname
+      email
+      status
+    }
+  }
+`
+
+export {
+  GET_ALL_UDDS,
+  GET_UDD_ADMINS
+}

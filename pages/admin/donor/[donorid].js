@@ -16,7 +16,7 @@ export default function DonorDetail() {
 
   const router = useRouter();
   const { props, donorid } = router.query;
-  console.log('==router.query', router.query);
+
   const { loading, error, data } = useQuery(GET_DONOR_DETAIL, {
     variables: { donorId: donorid },
   });
@@ -189,10 +189,10 @@ export default function DonorDetail() {
                     return (
                       <>
                         <TableRow>
-                          <TableCell label="idx" type="text"/>
-                          <TableCell label="idx" type="text"/>
-                          <TableCell label={branch.branchName} type="text"/>
-                          <TableCell label="idx" type="text"/>
+                          <TableCell value="idx" type="text"/>
+                          <TableCell value="idx" type="text"/>
+                          <TableCell value={branch.branchName} type="text"/>
+                          <TableCell value="idx" type="text"/>
                         </TableRow>
                         <div className="flex flex-auto">
                           <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">

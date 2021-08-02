@@ -19,6 +19,8 @@ import UddModal from "../../../components/UddModal/UddModal";
 export default function Udds() {
 
   const router = useRouter();
+  const { role } = router.query;
+  console.log('===role', role);
   const [showModal, setShowModal] = useState(false);
   const { data, loading, error } = useQuery(GET_ALL_UDDS);
 
@@ -65,7 +67,7 @@ export default function Udds() {
             <TableHead title="Nama"/>
             <TableHead title="Alamat"/>
             <TableHead title="Ukuran"/>
-            <TableHead title="Aksi"/>
+            { role == "superadminpusat" ? <TableHead title="Aksi"/> : <></> }
           </TableHeader>
           <TableBody>
             {
@@ -74,10 +76,18 @@ export default function Udds() {
                 return (
                   <>
                     <TableRow key={id} onClick={() => onTableRowClick(id)}>
-                      <TableCell label={++index} type="text"/>
-                      <TableCell label={uddName} type="text"/>
-                      <TableCell label={uddProvince} type="text"/>
-                      <TableCell label={uddSize} type="label"/>
+                      <TableCell value={++index} type="text"/>
+                      <TableCell value={uddName} type="text"/>
+                      <TableCell value={uddProvince} type="text"/>
+                      <TableCell value={uddSize} type="label"/>
+                      {
+                        role == "superadminpusat"
+                          ? <TableCell
+                              type="button"
+                              buttonColor="yellow"
+                              buttonIcon="fa-edit"/>
+                          : <></>
+                      }
                     </TableRow>
                   </>
                 )
