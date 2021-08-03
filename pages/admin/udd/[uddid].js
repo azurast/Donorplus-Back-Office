@@ -22,6 +22,7 @@ export default function UddDetail() {
   console.log('===role', role);
 
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState("add");
 
   const { loading, error, data } = useQuery(GET_UDD_ADMINS, {
     variables: { uddId: uddid },
@@ -36,8 +37,8 @@ export default function UddDetail() {
     return null;
   }
 
-  const handleShowModal = () => {
-    setShowModal(!showModal)
+  const onTableRowClick = () => {
+
   }
 
   const uddAdmins = data.getAdminPmiByBranch;
@@ -45,13 +46,22 @@ export default function UddDetail() {
 
   return(
       <>
+        <AdminModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          uddId={uddid}
+          modalType={modalType}
+        />
         <TableContainer>
           <TableTitle
             titleText={uddName}
-            showButton={role === "superadminpusat" ? true : false}
+            showButton={role === "superadminpusat"}
             buttonText="Tambah Admin"
             buttonColor="emerald"
-            handleButtonClick={handleShowModal}
+            handleButtonClick={() => {
+              setModalType("add");
+              setShowModal(true);
+            }}
           />
           <Table>
             <TableHeader>
@@ -59,7 +69,7 @@ export default function UddDetail() {
               <TableHead title="Nama"/>
               <TableHead title="Email"/>
               <TableHead title="Status"/>
-              {/*{ role == "superadminpusat" ? <TableHead title="Aksi"/> : <></> }*/}
+              { role === "superadminpusat" ? <TableHead title="Aksi"/> : <></> }
             </TableHeader>
             <TableBody>
               {
@@ -72,14 +82,20 @@ export default function UddDetail() {
                         <TableCell value={fullName} type="text"/>
                         <TableCell value={email} type="text"/>
                         <TableCell value={status} type="status"/>
-                        {/*{*/}
-                        {/*  role == "superadminpusat"*/}
-                        {/*    ? <TableCell*/}
-                        {/*      type="button"*/}
-                        {/*      buttonColor="yellow"*/}
-                        {/*      buttonIcon="fa-edit"/>*/}
-                        {/*    : <></>*/}
-                        {/*}*/}
+                        {
+                          role === "superadminpusat"
+                            ? <TableCell
+                                onTdClick={(e) => e.stopPropagation()}
+                                type="button"
+                                buttonColor="yellow"
+                                buttonIcon="fa-edit"
+                                onButtonClick={() => {
+                                  setModalType("edit");
+                                  setShowModal(true)
+                                }}
+                            />
+                            : <></>
+                        }
                       </TableRow>
                     </>
                   )
@@ -88,11 +104,6 @@ export default function UddDetail() {
             </TableBody>
           </Table>
         </TableContainer>
-        <AdminModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          uddId={uddid}
-          mode="add"/>
       </>
   );
 }

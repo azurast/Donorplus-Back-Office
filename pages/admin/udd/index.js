@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client"
 import { GET_ALL_UDDS } from "../../../services/graphql/queries/uddQueries";
-
 // COMPONENTS
 import Admin from "layouts/Admin"
 import TableContainer from "../../../components/Table/TableContainer";
@@ -23,6 +22,7 @@ export default function Udds() {
   console.log('===role', role);
 
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState('');
   const { data, loading, error } = useQuery(GET_ALL_UDDS);
 
   if (loading) {
@@ -35,10 +35,6 @@ export default function Udds() {
   }
 
   const udds = data.getAllPmi;
-
-  const handleShowModal = () => {
-    setShowModal(!showModal)
-  }
 
   const onTableRowClick = (id, uddName) => {
     if(role === "superadminpusat") {
@@ -55,13 +51,22 @@ export default function Udds() {
 
   return(
     <>
+      <UddModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        modalType={modalType}
+      />
       <TableContainer>
         <TableTitle
           titleText="Daftar Unit Donor Darah"
-          showButton={role === "superadminpusat" ? true : false}
+          showButton={role === "superadminpusat"}
           buttonText="Tambah UDD"
           buttonColor="emerald"
-          handleButtonClick={handleShowModal}
+          handleButtonClick={() => {
+            console.log('===add button clicked');
+            setModalType("add")
+            setShowModal(true);
+          }}
         />
         <Table>
           <TableHeader>
@@ -69,7 +74,7 @@ export default function Udds() {
             <TableHead title="Nama"/>
             <TableHead title="Alamat"/>
             <TableHead title="Ukuran"/>
-            { role == "superadminpusat" ? <TableHead title="Aksi"/> : <></> }
+            { role === "superadminpusat" ? <TableHead title="Aksi"/> : <></> }
           </TableHeader>
           <TableBody>
             {
@@ -83,11 +88,18 @@ export default function Udds() {
                       <TableCell value={uddAddress} type="text"/>
                       <TableCell value={uddSize} type="label"/>
                       {
-                        role == "superadminpusat"
+                        role === "superadminpusat"
                           ? <TableCell
+                              onTdClick={(e) => e.stopPropagation()}
                               type="button"
                               buttonColor="yellow"
-                              buttonIcon="fa-edit"/>
+                              buttonIcon="fa-edit"
+                              onButtonClick={() => {
+                                console.log('===edit button clicked');
+                                setModalType("edit")
+                                setShowModal(true);
+                              }}
+                          />
                           : <></>
                       }
                     </TableRow>
@@ -98,11 +110,6 @@ export default function Udds() {
           </TableBody>
         </Table>
       </TableContainer>
-      <UddModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        mode="add"
-      />
     </>
   );
 }

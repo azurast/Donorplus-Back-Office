@@ -10,7 +10,7 @@ import RegularInput from "../Inputs/RegularInput";
 import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
 
-export default function AdminModal({ showModal, setShowModal, mode, uddId }) {
+export default function AdminModal({ showModal, setShowModal, modalType, uddId }) {
 
   const [createAdmin, {data, loading, error}] = useMutation(CREATE_ADMIN);
 
@@ -67,7 +67,7 @@ export default function AdminModal({ showModal, setShowModal, mode, uddId }) {
                     {/*header*/}
                     <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                       <h3 className="text-3xl font-semibold">
-                        {mode === "add" ? "Tambah Admin" : "Ubah Admin"}
+                        {modalType === "add" ? "Tambah Admin" : "Ubah Admin"}
                       </h3>
                       <button
                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"

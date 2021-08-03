@@ -8,9 +8,12 @@ import React from "react";
 *       button
 *     }
 * */
-const TableCell = ({ type, value, buttonColor, buttonIcon, onButtonClick }) => {
+const TableCell = ({ type, value, buttonColor, buttonIcon, onButtonClick, onTdClick }) => {
   return (
-    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+    <td
+      className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      onClick={onTdClick}
+    >
       {
         type === "label"
           ? <div className="flex">
@@ -23,9 +26,12 @@ const TableCell = ({ type, value, buttonColor, buttonIcon, onButtonClick }) => {
           ? <> <i className={"fas fa-circle mr-2 " + (value === true ? "text-emerald-500" : "text-red-500")}></i> {value === true ? "Aktif" : "Tidak Aktif"} </>
           : type === "button"
             ? <>
-                <a className={"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 bg-"+ buttonColor +"-500 active:bg-blueGray-500 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}>
+                <button
+                  className={"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 bg-"+ buttonColor +"-500 active:bg-blueGray-500 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                  onClick={onButtonClick}
+                >
                   <i className={"far " + buttonIcon}></i>
-                </a>
+                </button>
               </>
             : <> {value} </>
       }
