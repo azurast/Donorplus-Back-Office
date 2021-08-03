@@ -1,5 +1,5 @@
 import React from "react"
-import { Formik, Form, useField } from 'formik';
+import { useField } from "formik";
 
 const RegularInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
