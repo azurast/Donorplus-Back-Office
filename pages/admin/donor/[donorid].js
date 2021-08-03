@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_DONOR_DETAIL } from "../../../services/graphql/queries/donorQueries";
-
+import { UPDATE_DONORS_DETAIL } from "../../../services/graphql/mutations/donorMutations";
 import Admin from "../../../layouts/Admin";
 import Table from "../../../components/Table/Table";
 import TableHead from "../../../components/Table/TableHead";
@@ -17,19 +17,20 @@ import RegularInput from "../../../components/Inputs/RegularInput";
 export default function DonorDetail() {
 
   const router = useRouter();
-  const { props, donorid } = router.query;
-  const [editButtonState, setEditButtonState] = useState(false);
+  const { donorid } = router.query;
 
   const { loading, error, data } = useQuery(GET_DONOR_DETAIL, {
     variables: { donorId: donorid },
   });
 
-  if (loading) {
+  const[updateDonor, { loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPDATE_DONORS_DETAIL)
+
+  if (loading || mutationLoading) {
     return <h2>Loading</h2>
   }
 
-  if (error) {
-    console.error(error)
+  if (error || mutationError) {
+    console.error(error||mutationError)
     return null;
   }
 
@@ -117,6 +118,14 @@ export default function DonorDetail() {
           }}
           onSubmit={ values => {
             alert(JSON.stringify(values, null, 2));
+            const { bloodType, bloodRhesus } = values;
+            updateDonor({
+              variables: {
+                donorId: donorid,
+                bloodType: bloodType+bloodRhesus
+              },
+              refetchQueries: [{query: GET_DONOR_DETAIL}]
+            })
           }}
           >
             <Form>
@@ -135,8 +144,10 @@ export default function DonorDetail() {
                     BIODATA
                   </h1>
                   <RegularInput label="Nama Lengkap" name="fullName" inputType="text" disabled={true}/>
+                  {/* TODO : CONVERT TO FORMAT */}
                   <RegularInput label="Tanggal Lahir" name="dateOfBirth" inputType="date" disabled={true}/>
                   <RegularInput label="Tempat Lahir" name="placeOfBirth" inputType="text" disabled={true}/>
+                  {/* TODO : CONVERT BIRTHDATE TO AGE */}
                   {/*<RegularInput label="Umur" name="placeOfBirth" inputType="text" state="disabled"/>*/}
                   <RegularInput label="Golongan Darah" name="bloodType" inputType="text" disabled={false}/>
                   <RegularInput label="Rhesus" name="bloodRhesus" inputType="text" disabled={false}/>
