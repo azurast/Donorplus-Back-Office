@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types"
 import { Formik, Form } from "formik";
 import { useMutation } from "@apollo/client";
-import { CREATE_UDD } from "../../services/graphql/mutations/uddMutations";
+import { CREATE_UDD, UPDATE_UDD } from "../../services/graphql/mutations/uddMutations";
 import { GET_ALL_UDDS } from "../../services/graphql/queries/uddQueries";
 
 // COMPONENTS
@@ -11,9 +11,9 @@ import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
 
 export default function UddModal({ showModal, setShowModal, modalType, udd }) {
-  console.log('===udd', udd);
 
-  const [createUdd, {data, loading, error}] = useMutation(CREATE_UDD);
+  const mutation = modalType === "add" ? CREATE_UDD : UPDATE_UDD;
+  const [createUdd, {data, loading, error}] = useMutation(mutation);
 
   if (loading) {
     return <h2>Loading</h2>
@@ -44,6 +44,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                   const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddStatus } = values;
                   createUdd({
                     variables: {
+                      branchId: udd.id,
                       branchName: uddName,
                       branchSize: "Besar",
                       branchAddress: uddAddress,
@@ -129,7 +130,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                           className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="submit"
                         >
-                          Save Changes
+                          { modalType === "add" ? "Tambah" : "Perbaharui" }
                         </button>
                       </div>
                     </div>

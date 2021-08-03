@@ -44,8 +44,32 @@ const CREATE_ADMIN = gql`
     }
   }
 `
+const UPDATE_UDD = gql`
+  mutation updateUdd(
+    $branchId: String!,
+    $branchName: String!,
+    $branchSize: String!,
+    $branchAddress: String!,
+    $langitude: String!,
+    $longitude: String!,
+  ) {
+    updatePmi(
+      id: $branchId,
+      branchName: $branchName,
+      branchSize: $branchSize,
+      branchAddress: $branchAddress,
+      langitude: $langitude,
+      longitude: $longitude
+    ) {
+      branchName
+      branchSize
+      branchAddress
+    }
+  }
+`
 
 export {
   CREATE_UDD,
-  CREATE_ADMIN
+  CREATE_ADMIN,
+  UPDATE_UDD
 };
