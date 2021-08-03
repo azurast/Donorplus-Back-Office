@@ -10,9 +10,9 @@ import RegularInput from "../Inputs/RegularInput";
 import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
 
-export default function UddModal({ showModal, setShowModal, modalType }) {
+export default function UddModal({ showModal, setShowModal, modalType, udd }) {
+  console.log('===udd', udd);
 
-  console.log('===showmodal', showModal);
   const [createUdd, {data, loading, error}] = useMutation(CREATE_UDD);
 
   if (loading) {
@@ -34,14 +34,13 @@ export default function UddModal({ showModal, setShowModal, modalType }) {
             >
               <Formik
                 initialValues={{
-                  uddName: '',
-                  uddPhoneNumber: '',
-                  uddAddress: '',
-                  uddLangitude: '',
-                  uddLongitude: '',
-                  uddStatus: false
+                  uddName: udd.branchName || '',
+                  uddAddress: udd.branchAddress || '',
+                  uddLangitude: udd.langitude || '',
+                  uddLongitude: udd.longitude || '',
+                  uddStatus: udd.status || ''
                 }}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={(values) => {
                   const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddStatus } = values;
                   createUdd({
                     variables: {
@@ -85,12 +84,12 @@ export default function UddModal({ showModal, setShowModal, modalType }) {
                                 label="Nama UDD"
                                 placeholder="Nama UDD"
                               />
-                              <RegularInput
-                                inputType="number"
-                                name="uddPhoneNumber"
-                                label="Nomor Telepon"
-                                placeholder="021-xxx-xxx"
-                              />
+                              {/*<RegularInput*/}
+                              {/*  inputType="number"*/}
+                              {/*  name="uddPhoneNumber"*/}
+                              {/*  label="Nomor Telepon"*/}
+                              {/*  placeholder="021-xxx-xxx"*/}
+                              {/*/>*/}
                               <RegularInput
                                 inputType="text"
                                 name="uddLangitude"

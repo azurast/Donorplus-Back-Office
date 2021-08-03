@@ -23,6 +23,7 @@ export default function Udds() {
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
+  const [selectedUdd, setSelectedUdd] = useState('');
   const { data, loading, error } = useQuery(GET_ALL_UDDS);
 
   if (loading) {
@@ -55,6 +56,7 @@ export default function Udds() {
         showModal={showModal}
         setShowModal={setShowModal}
         modalType={modalType}
+        udd={selectedUdd}
       />
       <TableContainer>
         <TableTitle
@@ -97,6 +99,7 @@ export default function Udds() {
                               onButtonClick={() => {
                                 console.log('===edit button clicked');
                                 setModalType("edit")
+                                setSelectedUdd(udd);
                                 setShowModal(true);
                               }}
                           />
