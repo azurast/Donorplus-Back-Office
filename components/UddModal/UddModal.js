@@ -38,7 +38,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                   uddAddress: udd.branchAddress || '',
                   uddLangitude: udd.langitude || '',
                   uddLongitude: udd.longitude || '',
-                  uddStatus: udd.status || ''
+                  uddStatus: udd.status || false
                 }}
                 onSubmit={(values) => {
                   const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddStatus } = values;
@@ -111,7 +111,6 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                               <CheckboxInput
                                 label="Keaktifan"
                                 name="uddStatus"
-                                status={true}
                               />
                             </div>
                           </div>

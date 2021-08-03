@@ -23,6 +23,7 @@ export default function UddDetail() {
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("add");
+  const [selectedAdmin, setSelectedAdmin] = useState("");
 
   const { loading, error, data } = useQuery(GET_UDD_ADMINS, {
     variables: { uddId: uddid },
@@ -49,7 +50,10 @@ export default function UddDetail() {
         <AdminModal
           showModal={showModal}
           setShowModal={setShowModal}
-          uddId={uddid}
+          admin={{
+            uddId: uddid,
+            ...selectedAdmin
+          }}
           modalType={modalType}
         />
         <TableContainer>
@@ -92,6 +96,7 @@ export default function UddDetail() {
                                 onButtonClick={() => {
                                   setModalType("edit");
                                   setShowModal(true)
+                                  setSelectedAdmin(admin);
                                 }}
                             />
                             : <></>

@@ -18,6 +18,8 @@ const GET_UDD_ADMINS = gql`
       fullname
       email
       status
+      password
+      role
     }
   }
 `

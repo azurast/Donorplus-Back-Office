@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types"
 import { Formik, Form } from "formik";
 import { useMutation } from "@apollo/client";
-import { CREATE_ADMIN } from "../../services/graphql/mutations/uddMutations";
+import { CREATE_ADMIN, UPDATE_ADMIN } from "../../services/graphql/mutations/uddMutations";
 import { GET_UDD_ADMINS } from "../../services/graphql/queries/uddQueries";
 
 // COMPONENTS
@@ -10,9 +10,11 @@ import RegularInput from "../Inputs/RegularInput";
 import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
 
-export default function AdminModal({ showModal, setShowModal, modalType, uddId }) {
+export default function AdminModal({ showModal, setShowModal, modalType, admin }) {
 
-  const [createAdmin, {data, loading, error}] = useMutation(CREATE_ADMIN);
+  const mutation = modalType === "add" ? CREATE_ADMIN : UPDATE_ADMIN
+  const [createAdmin, {data, loading, error}] = useMutation(mutation);
+  const [status, setStatus] = useState(admin.status);
 
   if (loading) {
     return <h2>Loading</h2>
@@ -32,18 +34,19 @@ export default function AdminModal({ showModal, setShowModal, modalType, uddId }
           >
             <Formik
               initialValues={{
-                adminName: '',
-                adminEmail: '',
-                adminPassword: '',
-                adminRole: '',
-                adminStatus: false
+                adminName: admin.fullname || '',
+                adminEmail: admin.email || '',
+                adminPassword: admin.password || '',
+                adminRole: admin.role || '',
+                adminStatus: admin.status || false
               }}
               onSubmit={(values, { setSubmitting }) => {
                 // alert(JSON.stringify(values, null, 2));
                 const { adminName, adminEmail, adminPassword, adminRole, adminStatus } = values;
                 createAdmin({
                   variables: {
-                    branchId: uddId,
+                    adminId: admin.id,
+                    branchId: admin.uddId,
                     fullName: adminName,
                     email: adminEmail,
                     password: adminPassword,
@@ -53,7 +56,7 @@ export default function AdminModal({ showModal, setShowModal, modalType, uddId }
                   refetchQueries: [{
                     query: GET_UDD_ADMINS,
                     variables: {
-                      uddId
+                      uddId: admin.uddId
                     }
                   }]
                 });
@@ -112,7 +115,8 @@ export default function AdminModal({ showModal, setShowModal, modalType, uddId }
                             <CheckboxInput
                               label="Keaktifan"
                               name="adminStatus"
-                              status={true}
+                              checked={status}
+                              onChange={() => setStatus(!status)}
                             />
                           </div>
                         </div>

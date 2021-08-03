@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useState } from "react"
 import { Formik, Form, useField } from 'formik';
 
 const CheckboxInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+
   return (
     <>
       <label
