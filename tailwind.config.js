@@ -65,6 +65,7 @@ module.exports = {
       },
       minWidth: {
         "140-px": "140px",
+        "250-px": "220px",
         48: "12rem",
       },
       backgroundSize: {
