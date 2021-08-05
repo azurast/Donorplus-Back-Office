@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types"
 import { useQuery, useMutation } from "@apollo/client";
-import {GET_INTERVIEW_ACTIVITIES, UPDATE_INTERVIEW} from "../../../services/graphql/mutations/activityMutations";
+import { GET_INTERVIEW_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
+import { UPDATE_INTERVIEW } from "../../../services/graphql/mutations/activityMutations";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -78,6 +79,7 @@ export default function Interview() {
         );
     }
 
+    // TODO : SORT BY 'didInterviewAt'
     return(
         <div>
             <TableContainer>
@@ -93,6 +95,7 @@ export default function Interview() {
                         <TableHead title="Jenis Kelamin"/>
                         <TableHead title="Golongan Darah"/>
                         <TableHead title="Status"/>
+                        {/*<TableHead title="Catatan"/>*/}
                         <TableHead title="Aksi"/>
                     </TableHeader>
                     <TableBody>
@@ -114,6 +117,7 @@ export default function Interview() {
                                       <TableCell value={sex} type="text"/>
                                       <TableCell value={bloodType} type="text"/>
                                       <TableCell value={status} type="label"/>
+                                      // TODO : add button that opens modal to update interview notes
                                       <ActionButtons activityId={id} passInterviewStatus={passInterview}/>
                                   </TableRow>
                                 );

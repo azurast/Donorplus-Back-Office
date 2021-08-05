@@ -103,29 +103,23 @@ const UPDATE_INTERVIEW = gql`
     }
 `
 
-const GET_INTERVIEW_ACTIVITIES = gql`
-    query getInterviewActivities{
-        getActivityForInterview {
-            id
-            didInterview
-            didInterviewAt
-            passInterview
-            passInterviewAt
-            pendonor {
-                fullName
-                pendonorDetails {
-                    sex
-                    dateOfBirth
-                    bloodType
-                }
-            }
-        }
-    }
-`
-
-const GET_BLOODTEST_ACTIVITIES = gql`
-    query getBloodTestActivities{
-        getActivityForBloodTest {
+const UPDATE_BLOODTEST = gql`
+    mutation updateActivity(
+        $activityId:String!,
+        $antibodyLevel: String!,
+        $didBloodTestStatus: Boolean!,
+        $passBloodTestStatus: Boolean!,
+        $passBloodTestDate: Date!,
+        $passBloodTestShow: Boolean!
+    ){
+        updateActivity(
+            id: $activityId,
+            antibodyLevel: $antibodyLevel,
+            didBloodTest: $didBloodTestStatus,
+            passBloodTest: $passBloodTestStatus,
+            passBloodTestAt: $passBloodTestDate,
+            passBloodTestShow: $passBloodTestShow,
+        ) {
             id
             pendonor {
                 fullName
@@ -134,21 +128,10 @@ const GET_BLOODTEST_ACTIVITIES = gql`
     }
 `
 
-const GET_PLASMADONOR_ACTIVITIES = gql`
-    query getDonorPlasmaActivities{
-        getActivityForDonor {
-            id
-            pendonor {
-                fullName
-            }
-        }
-    }
-`
+
 
 export {
   UPDATE_ACTIVITY,
   UPDATE_INTERVIEW,
-  GET_INTERVIEW_ACTIVITIES,
-  GET_BLOODTEST_ACTIVITIES,
-  GET_PLASMADONOR_ACTIVITIES
+  UPDATE_BLOODTEST
 }
