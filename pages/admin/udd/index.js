@@ -19,7 +19,6 @@ export default function Udds() {
 
   const router = useRouter();
   const { role } = router.query;
-  console.log('===role', role);
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');

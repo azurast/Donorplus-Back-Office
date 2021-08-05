@@ -71,7 +71,7 @@ export default function Donors() {
             {
               donors.map((donor, index) => {
                 const {id, fullName, pendonorDetails} = donor;
-                const {sex, dateOfBirth, bloodType, nik} = pendonorDetails;
+                const {sex, dateOfBirth, bloodType, nik} = pendonorDetails || {};
                 const age = dateOfBirth;
                 return (
                   <TableRow key={id} onClick={() => onTableRowClick(id)}>
