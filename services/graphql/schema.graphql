@@ -61,6 +61,7 @@ type Activity {
   passBloodTest: Boolean
   didScheduleTest: Boolean
   didDonor: Boolean
+  processState: Boolean
   passFormShow: Boolean
   didScheduleShow: Boolean
   didInterviewShow: Boolean
@@ -183,6 +184,8 @@ type Mutation {
     pcrNegativeImg: String
   ): PendonorDetail
   updatePendonorDetail(
+    id: String
+    pendonorId: String
     nik: String
     sex: String
     bloodType: String
@@ -241,6 +244,7 @@ type Mutation {
     passBloodTest: Boolean
     didScheduleTest: Boolean
     didDonor: Boolean
+    processState: Boolean
     passFormShow: Boolean
     didScheduleShow: Boolean
     didInterviewShow: Boolean
@@ -272,6 +276,7 @@ type Mutation {
     passBloodTest: Boolean
     didScheduleTest: Boolean
     didDonor: Boolean
+    processState: Boolean
     passFormShow: Boolean
     didScheduleShow: Boolean
     didInterviewShow: Boolean

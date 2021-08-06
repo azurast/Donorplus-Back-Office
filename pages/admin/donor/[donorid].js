@@ -36,6 +36,7 @@ export default function DonorDetail() {
 
   const donorsDetail = data.getPendonorDetail || {} ;
   const {
+    id,
     pendonor,
     sex,
     dateOfBirth,
@@ -95,8 +96,8 @@ export default function DonorDetail() {
             sex,
             dateOfBirth,
             placeOfBirth,
-            bloodType: bloodType.slice(0,1),
-            bloodRhesus: bloodType.slice(1,2),
+            bloodType: bloodType.substr(0, bloodType.length-1),
+            bloodRhesus: bloodType.substr(-1),
             nik,
             donorCount,
             domisiliProvinsi,
@@ -121,10 +122,15 @@ export default function DonorDetail() {
             const { bloodType, bloodRhesus } = values;
             updateDonor({
               variables: {
+                donorDetailId: id,
                 donorId: donorid,
                 bloodType: bloodType+bloodRhesus
               },
-              refetchQueries: [{query: GET_DONOR_DETAIL}]
+              // TODO : data is not changed immediately, must click refresh button first
+              refetchQueries: [{
+                query: GET_DONOR_DETAIL,
+                variables: {donorId: donorid}
+              }]
             })
           }}
           >
