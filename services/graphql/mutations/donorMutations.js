@@ -6,7 +6,7 @@ const UPDATE_DONORS_DETAIL = gql`
     $bloodType: String!
   ) {
     updatePendonorDetail(
-     pendonorId: $donorId,
+     id: $donorId,
      bloodType: $bloodType
     ) {
       bloodType

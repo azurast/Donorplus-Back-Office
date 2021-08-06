@@ -128,10 +128,31 @@ const UPDATE_BLOODTEST = gql`
     }
 `
 
-
+const UPDATE_DONOR_PLASMA = gql`
+    mutation updateActivity(
+        $activityId:String!,
+        $didDonorStatus: Boolean!,
+        $didDonorDate: Date!,
+        $didDonorShow: Boolean!
+    ){
+        updateActivity(
+            id: $activityId,
+            didDonor: $didDonorStatus,
+            didDonorAt: $didDonorDate,
+            didDonorShow: $didDonorShow
+        ) {
+            id
+            didDonor
+            pendonor {
+                fullName
+            }
+        }
+    }
+`
 
 export {
   UPDATE_ACTIVITY,
   UPDATE_INTERVIEW,
-  UPDATE_BLOODTEST
+  UPDATE_BLOODTEST,
+  UPDATE_DONOR_PLASMA
 }

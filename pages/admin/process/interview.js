@@ -117,7 +117,7 @@ export default function Interview() {
                                       <TableCell value={sex} type="text"/>
                                       <TableCell value={bloodType} type="text"/>
                                       <TableCell value={status} type="label"/>
-                                      // TODO : add button that opens modal to update interview notes
+                                      {/* TODO : add button that opens modal to update interview notes*/}
                                       <ActionButtons activityId={id} passInterviewStatus={passInterview}/>
                                   </TableRow>
                                 );

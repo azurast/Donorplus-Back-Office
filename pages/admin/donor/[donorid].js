@@ -117,7 +117,7 @@ export default function DonorDetail() {
             pcrNegativeImg
           }}
           onSubmit={ values => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
             const { bloodType, bloodRhesus } = values;
             updateDonor({
               variables: {

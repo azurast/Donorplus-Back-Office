@@ -33,6 +33,8 @@ export default function BloodTest() {
 
     const listBloodTest = data.getActivityForBloodTest;
 
+    console.log('===bloodtest list', listBloodTest);
+
     const onActionButtonClick = (activityId, passBloodTest) => {
         const timestamp = new Date().toISOString();
         console.log('===timestamp', timestamp);
