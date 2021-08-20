@@ -24,7 +24,20 @@ const GET_UDD_ADMINS = gql`
   }
 `
 
+const GET_UDD_SCHEDULE = gql`
+  query getAllSchedule  {
+    getAllJadwal {
+      id
+      day
+      open
+      editable
+      timeslot
+    }
+  }
+`
+
 export {
   GET_ALL_UDDS,
-  GET_UDD_ADMINS
+  GET_UDD_ADMINS,
+  GET_UDD_SCHEDULE
 }
