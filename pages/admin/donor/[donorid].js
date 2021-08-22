@@ -23,7 +23,7 @@ export default function DonorDetail() {
     variables: { donorId: donorid },
   });
 
-  const[updateDonor, { loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPDATE_DONORS_DETAIL)
+  const[updateDonor, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(UPDATE_DONORS_DETAIL)
 
   if (loading || mutationLoading) {
     return <h2>Loading</h2>
@@ -34,8 +34,9 @@ export default function DonorDetail() {
     return null;
   }
 
-  const donorsDetail = data.getPendonorDetail;
+  const donorsDetail = data.getPendonorDetail || {} ;
   const {
+    id,
     pendonor,
     sex,
     dateOfBirth,
@@ -95,8 +96,8 @@ export default function DonorDetail() {
             sex,
             dateOfBirth,
             placeOfBirth,
-            bloodType: bloodType.slice(0,1),
-            bloodRhesus: bloodType.slice(1,2),
+            bloodType: bloodType.substr(0, bloodType.length-1),
+            bloodRhesus: bloodType.substr(-1),
             nik,
             donorCount,
             domisiliProvinsi,
@@ -117,14 +118,19 @@ export default function DonorDetail() {
             pcrNegativeImg
           }}
           onSubmit={ values => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
             const { bloodType, bloodRhesus } = values;
             updateDonor({
               variables: {
+                donorDetailId: id,
                 donorId: donorid,
                 bloodType: bloodType+bloodRhesus
               },
-              refetchQueries: [{query: GET_DONOR_DETAIL}]
+              // TODO : data is not changed immediately, must click refresh button first
+              refetchQueries: [{
+                query: GET_DONOR_DETAIL,
+                variables: {donorId: donorid}
+              }]
             })
           }}
           >
@@ -202,45 +208,44 @@ export default function DonorDetail() {
                 <TableHead title="Nomor"/>
                 <TableHead title="Tanggal"/>
                 <TableHead title="Tempat"/>
-                <TableHead title="Jumlah Kantong"/>
               </TableHeader>
               <TableBody>
                 {
-                  activitys.map(activity => {
+                  activitys.map((activity, index) => {
                     const { branch } = activity;
+                    console.log('===activity', activity);
                     return (
                       <>
                         <TableRow>
-                          <TableCell value="idx" type="text"/>
+                          <TableCell value={++index} type="text"/>
                           <TableCell value="idx" type="text"/>
                           <TableCell value={branch.branchName} type="text"/>
-                          <TableCell value="idx" type="text"/>
                         </TableRow>
-                        <div className="flex flex-auto">
-                          <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              CATATAN WAWANCARA
-                            </h1>
-                            <p>
-                              dfnsdjfbdjshfbsdfjbsdjfbsdhjfbsdjfhbsdhjfbsjdfbsjdfhbjsh
-                            </p>
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              HASIL TES DARAH
-                            </h1>
-                            <p>
-                              {/*<Row label="Titer Antibodi" value="250"/>*/}
-                            </p>
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              PERJALANAN
-                            </h1>
-                            <div className="flex flex-col">
-                              <Stepper label="Skrining Formulir" date="22/06/07" status={true} />
-                              <Stepper label="Wawancara" date="22/06/07" status={true} />
-                              <Stepper label="Tes Darah" date="22/06/07" status={true} />
-                              <Stepper label="Donor Darah" date="22/06/07" status={true} />
-                            </div>
-                          </div>
-                        </div>
+                        {/*<div className="flex flex-auto">*/}
+                        {/*  <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">*/}
+                        {/*    <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">*/}
+                        {/*      CATATAN WAWANCARA*/}
+                        {/*    </h1>*/}
+                        {/*    <p>*/}
+                        {/*      dfnsdjfbdjshfbsdfjbsdjfbsdhjfbsdjfhbsdhjfbsjdfbsjdfhbjsh*/}
+                        {/*    </p>*/}
+                        {/*    <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">*/}
+                        {/*      HASIL TES DARAH*/}
+                        {/*    </h1>*/}
+                        {/*    <p>*/}
+                        {/*      /!*<Row label="Titer Antibodi" value="250"/>*!/*/}
+                        {/*    </p>*/}
+                        {/*    <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">*/}
+                        {/*      PERJALANAN*/}
+                        {/*    </h1>*/}
+                        {/*    <div className="flex flex-col">*/}
+                        {/*      <Stepper label="Skrining Formulir" date="22/06/07" status={true} />*/}
+                        {/*      <Stepper label="Wawancara" date="22/06/07" status={true} />*/}
+                        {/*      <Stepper label="Tes Darah" date="22/06/07" status={true} />*/}
+                        {/*      <Stepper label="Donor Darah" date="22/06/07" status={true} />*/}
+                        {/*    </div>*/}
+                        {/*  </div>*/}
+                        {/*</div>*/}
                       </>
                     );
                   })

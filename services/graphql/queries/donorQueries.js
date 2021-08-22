@@ -18,6 +18,7 @@ const GET_ALL_DONORS = gql`
 const GET_DONOR_DETAIL = gql`
   query getAllDonors($donorId: String!) {
     getPendonorDetail(pendonorId: $donorId) {
+      id
       pendonor {
         fullName
         phoneNumber
