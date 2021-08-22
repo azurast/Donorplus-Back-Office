@@ -1,16 +1,20 @@
 import React from "react"
 import { useField } from "formik";
 
-const RegularInput = ({ label, ...props }) => {
+const RegularInput = ({ label, showLabel, ...props }) => {
   const [field, meta] = useField(props);
   return(
     <>
-      <label
-        className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-2"
-        htmlFor={name}
-      >
-        {label}
-      </label>
+      { showLabel
+          ?
+            <label
+              className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-2"
+              htmlFor={name}
+            >
+              {label}
+            </label>
+          : <></>
+      }
       <input
         {...field}
         {...props}
