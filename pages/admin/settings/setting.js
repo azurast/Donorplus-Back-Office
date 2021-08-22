@@ -9,13 +9,6 @@ import SlotTable from "../../../components/Table/SlotTable";
 
 export default function Setting() {
 
-    // function sort_days(days) {
-    //     var day_of_week = new Date().getDay();
-    //     var list = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-    //     var sorted_list = list.slice(day_of_week).concat(list.slice(0,day_of_week));
-    //     return days.sort(function(a,b) { return sorted_list.indexOf(a) > sorted_list.indexOf(b); });
-    // }
-
     const {data, loading, error} = useQuery(GET_UDD_SCHEDULE);
 
     if (loading) {
@@ -28,12 +21,13 @@ export default function Setting() {
     }
 
     const allSchedule = data.getAllJadwal
-
     return(
         <div className="flex">
-            <SlotTable
-                allSchedule={allSchedule}
-            />
+            {
+                allSchedule.map((each) => {
+                    return (<SlotTable schedule={each}/>);
+                })
+            }
         </div>
     );
 }

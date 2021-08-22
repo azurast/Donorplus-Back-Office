@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types"
 
-const TableTitle = ({ color, titleText, showButton, buttonText, buttonColor, handleButtonClick }) => {
+const TableTitle = ({ color, titleText, showButton, buttonText, buttonColor, handleButtonClick, disableButton}) => {
   return (
     <div className="rounded-t mb-0 px-4 py-3 border-0">
       <div className="flex flex-wrap items-center">
@@ -20,9 +20,10 @@ const TableTitle = ({ color, titleText, showButton, buttonText, buttonColor, han
             showButton
               ? <div className="w-1/2">
                 <button
-                  className={"bg-"+ buttonColor +"-500 text-white active:bg-"+ buttonColor +"-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
+                  className={(buttonColor ? "bg-"+ buttonColor +"-500 active:bg-"+ buttonColor +"-500 text-white" : " bg-blueGray-400 active:bg-blueGray-400 text-white " )+" font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
                   type="button"
                   onClick={handleButtonClick}
+                  disabled={disableButton}
                 >
                   {buttonText}
                 </button>
