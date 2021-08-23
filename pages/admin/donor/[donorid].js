@@ -35,6 +35,7 @@ export default function DonorDetail() {
   }
 
   const donorsDetail = data.getPendonorDetail;
+  console.log('===donorsDetail', donorsDetail);
   const {
     pendonor,
     sex,
@@ -54,14 +55,19 @@ export default function DonorDetail() {
     riwayatKomorbid,
     riwayatVaksin,
     riwayatGejalaKlinis,
+    riwayatTransfusi,
     hospitalName,
     pcrPositiveDate,
     pcrPositiveImg,
     pcrNegativeDate,
     pcrNegativeImg,
     createdAt,
-    updatedAt
+    updatedAt,
+    pass
   } = donorsDetail;
+
+  var arrayRiwayatGejalaKlinis = SplitByComa(riwayatGejalaKlinis);
+  var arrayRiwayatKomorbid = SplitByComa(riwayatKomorbid);
 
   const {
     fullName,
@@ -83,6 +89,21 @@ export default function DonorDetail() {
     );
   }
 
+  function ParseDate (isoString) {
+    return new Date(isoString).toDateString().substr(4)
+  }
+
+  function CalculateAge (dob) {
+    var diff_ms = Date.now() - dob.getTime();
+    var age_dt = new Date(diff_ms);
+    return Math.abs(age_dt.getUTCFullYear() - 1970);
+  }
+
+  function SplitByComa (longString) {
+    var points = longString.split(',')
+    return points
+  }
+
   return(
     <>
       <div className="relative flex flex-row space-x-4 min-w-0 w-full mb-6">
@@ -93,8 +114,9 @@ export default function DonorDetail() {
             phoneNumber,
             email,
             sex,
-            dateOfBirth,
+            dateOfBirth : ParseDate(dateOfBirth),
             placeOfBirth,
+            age: CalculateAge(new Date(dateOfBirth)),
             bloodType: bloodType.slice(0,1),
             bloodRhesus: bloodType.slice(1,2),
             nik,
@@ -104,17 +126,20 @@ export default function DonorDetail() {
             domisiliKecamatan,
             domisiliKelurahan,
             domisiliAddress,
-            riwayatHamil,
-            riwayatCovid,
+            riwayatHami : riwayatHamil ? "Ya" : "Tidak",
+            riwayatCovid : riwayatCovid ? "Ya" : "Tidak",
             riwayatKeluhan,
             riwayatKomorbid,
             riwayatVaksin,
-            riwayatGejalaKlinis,
+            arrayRiwayatGejalaKlinis,
+            arrayRiwayatKomorbid,
+            riwayatTransfusi,
             hospitalName,
-            pcrPositiveDate,
+            pcrPositiveDate : ParseDate(pcrPositiveDate),
             pcrPositiveImg,
-            pcrNegativeDate,
-            pcrNegativeImg
+            pcrNegativeDate : ParseDate(pcrNegativeDate),
+            pcrNegativeImg,
+            pass
           }}
           onSubmit={ values => {
             alert(JSON.stringify(values, null, 2));
@@ -143,52 +168,96 @@ export default function DonorDetail() {
                   <h1 className="text-lg text-blueGray-400 uppercase font-bold text-lg py-2">
                     BIODATA
                   </h1>
-                  <RegularInput label="Nama Lengkap" name="fullName" inputType="text" disabled={true}/>
+                  <RegularInput label="Nama Lengkap" name="fullName" inputType="text" disabled={true} showLabel={true}/>
                   {/* TODO : CONVERT TO FORMAT */}
-                  <RegularInput label="Tanggal Lahir" name="dateOfBirth" inputType="date" disabled={true}/>
-                  <RegularInput label="Tempat Lahir" name="placeOfBirth" inputType="text" disabled={true}/>
+                  <RegularInput label="Tanggal Lahir" name="dateOfBirth" inputType="date" disabled={true} showLabel={true}/>
+                  <RegularInput label="Tempat Lahir" name="placeOfBirth" inputType="text" disabled={true} showLabel={true}/>
                   {/* TODO : CONVERT BIRTHDATE TO AGE */}
-                  {/*<RegularInput label="Umur" name="placeOfBirth" inputType="text" state="disabled"/>*/}
-                  <RegularInput label="Golongan Darah" name="bloodType" inputType="text" disabled={false}/>
-                  <RegularInput label="Rhesus" name="bloodRhesus" inputType="text" disabled={false}/>
-                  <RegularInput label="Jenis Kelamin" name="sex" inputType="text" disabled={true}/>
-                  <RegularInput label="NIK" name="nik" inputType="text" disabled={true}/>
-                  <RegularInput label="Nomor HP" name="phoneNumber" inputType="tel" disabled={true}/>
-                  <RegularInput label="Email" name="email" inputType="email" disabled={true}/>
+                  <RegularInput label="Umur" name="age" inputType="text" state="disabled" disabled={true} showLabel={true}/>
+                  <RegularInput label="Golongan Darah" name="bloodType" inputType="text" disabled={false} showLabel={true}/>
+                  <RegularInput label="Rhesus" name="bloodRhesus" inputType="text" disabled={false} showLabel={true}/>
+                  <RegularInput label="Jenis Kelamin" name="sex" inputType="text" disabled={true} showLabel={true}/>
+                  <RegularInput label="NIK" name="nik" inputType="text" disabled={true} showLabel={true}/>
+                  <RegularInput label="Nomor HP" name="phoneNumber" inputType="tel" disabled={true} showLabel={true}/>
+                  <RegularInput label="Email" name="email" inputType="email" disabled={true} showLabel={true}/>
                 </div>
                 <div>
                   <h1 className="text-lg text-blueGray-400 uppercase font-bold text-lg py-2">
                     DOMISILI
                   </h1>
-                  <RegularInput label="Provinsi" name="domisiliProvinsi" disabled={true}/>
-                  <RegularInput label="Kota/Kabupaten" name="domisiliKotKab" disabled={true}/>
-                  <RegularInput label="Kecamatan" name="domisiliKecamatan" disabled={true}/>
-                  <RegularInput label="Kelurahan" name="domisiliKelurahan" disabled={true}/>
-                  <RegularInput label="Alamat" name="domisiliAddress" disabled={true}/>
+                  <RegularInput label="Provinsi" name="domisiliProvinsi" disabled={true} showLabel={true}/>
+                  <RegularInput label="Kota/Kabupaten" name="domisiliKotKab" disabled={true} showLabel={true}/>
+                  <RegularInput label="Kecamatan" name="domisiliKecamatan" disabled={true} showLabel={true}/>
+                  <RegularInput label="Kelurahan" name="domisiliKelurahan" disabled={true} showLabel={true}/>
+                  <RegularInput label="Alamat" name="domisiliAddress" disabled={true} showLabel={true}/>
                 </div>
                 <div>
                   <h1 className="text-lg text-blueGray-400 uppercase font-bold text-lg py-2">
                     RIWAYAT COVID-19
                   </h1>
-                  <RegularInput label="Pernah Terkena Covid" name="riwayatCovid" disabled={true}/>
-                  <RegularInput label="Gejala Selama Covid" name="riwayatGejalaKlinis" disabled={true}/>
-                  <RegularInput label="Rumah Sakit Dirawat" name="hospitalName" disabled={true}/>
-                  <RegularInput label="Tanggal PCR Positif" name="pcrPositiveDate" disabled={true}/>
-                  {/*TODO : CHANGE TO IMAGE*/}
-                  <RegularInput label="Bukti PCR Positif" name="pcrPositiveImg" disabled={true}/>
-                  <RegularInput label="Tanggal PCR Negatif" name="pcrNegativeDate" disabled={true}/>
-                  {/*TODO: CHANGE TO IMAGE*/}
-                  <RegularInput label="Bukti PCR Negatif" name="pcrNegativeImg" disabled={true}/>
+                  <RegularInput label="Pernah Terpapar Covid" name="riwayatCovid" disabled={true} showLabel={true}/>
+                  <RegularInput label="Rumah Sakit Dirawat" name="hospitalName" disabled={true} showLabel={true}/>
+                  <RegularInput label="Tanggal PCR Positif" name="pcrPositiveDate" disabled={true} showLabel={true}/>
+                  <div>
+                    <img
+                        src={pcrPositiveImg}
+                        className="object-scale-down h-48 w-full py-3"
+                    />
+                  </div>
+                  <RegularInput label="Tanggal PCR Negatif" name="pcrNegativeDate" disabled={true} showLabel={true}/>
+                  <div>
+                    <img
+                        src={pcrNegativeImg}
+                        className="object-scale-down h-48 w-full py-3"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <h1 className="text-lg text-blueGray-400 uppercase font-bold text-lg py-2">
+                  <h1 className="text-lg text-blueGray-400 uppercase font-bold text-lg py-2" showLabel={true}>
                     RIWAYAT KESEHATAN
                   </h1>
-                  <RegularInput label="Pernah Hamil" name="riwayatHamil" disabled={true}/>
-                  <RegularInput label="Sudah Divaksin" name="riwayatVaksin" disabled={true}/>
-                  <RegularInput label="Riwayat Gejala Klinis" name="riwayatGejalaKlinis" disabled={true}/>
-                  <RegularInput label="Riwayat Penyakit Komorbid" name="riwayatKomorbid" disabled={true}/>
-                  {/* TODO : ADD RIWAYAT DONOR DARAH */}
+                  {
+                    donorsDetail.sex == "Perempuan"
+                        ? <RegularInput label="Pernah Hamil" name="riwayatHamil" disabled={true} showLabel={true}/>
+                        : <></>
+                  }
+                  {/* TODO : TURN INTO DROPDOWN */}
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-2">
+                    Vaksin
+                  </label>
+                  <div className="px-4">
+                    <li>{riwayatVaksin}</li>
+                  </div>
+                  {/* TODO : TURN INTO DROPDOWN */}
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-2">
+                    Transfusi Darah
+                  </label>
+                  <div className="px-4">
+                    <li>{riwayatTransfusi ? "Ya" : "Tidak"}</li>
+                  </div>
+                  {/* TODO : TURN INTO CHECKBOXES */}
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-2">
+                    Gejala Klinis
+                  </label>
+                  <div className="px-4">
+                      {
+                        arrayRiwayatGejalaKlinis.map((each) => {
+                          return <li>{each}</li>
+                        })
+                      }
+                  </div>
+                  {/* TODO : TURN INTO CHECKBOXES */}
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-2">
+                    Penyakit Komorbid
+                  </label>
+                  <div className="px-4">
+                    {
+                      arrayRiwayatKomorbid.map((each) => {
+                        return <li>{each}</li>
+                      })
+                    }
+                  </div>
+
                   {/*<RegularInput label="Riwayat Donor Darah" name="pcrPositiveDate" disabled={true}/>*/}
                 </div>
               </div>

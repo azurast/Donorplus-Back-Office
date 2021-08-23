@@ -21,6 +21,7 @@ export default function Setting() {
     }
 
     const allSchedule = data.getAllJadwal
+    console.log('===allSchedule', allSchedule);
     return(
         <div className="flex">
             {
