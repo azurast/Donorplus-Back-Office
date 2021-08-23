@@ -46,6 +46,7 @@ const GET_DONOR_DETAIL = gql`
       riwayatKomorbid
       riwayatVaksin
       riwayatGejalaKlinis
+      riwayatTransfusi
       hospitalName
       pcrPositiveDate
       pcrPositiveImg
@@ -53,6 +54,7 @@ const GET_DONOR_DETAIL = gql`
       pcrNegativeImg
       createdAt
       updatedAt
+      pass
     }
   }
 `

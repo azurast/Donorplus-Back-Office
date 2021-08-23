@@ -31,30 +31,48 @@ export default function SlotTable({ schedule }) {
   }
 
   return (
-
+      <Formik
+          initialValues={{
+              slot: schedule.timeslot.slot,
+              open: schedule.open
+          }}
+          onSubmit={ values => {
+              alert(JSON.stringify(values, null, 2));
+          }}
+  >
+          <Form>
       <div
         className="relative flex flex-col break-words w-full mb-6 shadow-lg rounded bg-white mr-4"
       >
         <TableTitle
           titleText={schedule.day}
           showButton={true}
-          buttonText="Ubah"
+          buttonText={!isEditing ? "Simpan" : "Ubah"}
           buttonColor={schedule.editable ? "yellow" : null}
           handleButtonClick={handleEditMode}
           disableButton={!schedule.editable || !schedule.open}
-          />
-          <Table key={schedule.id}>
+          buttonType={!isEditing ? "submit" : "button"}
+          >
+            {/*TODO : kalo ubah, ganti jadi dropdown option*/}
 
+            <div className="relative inline-flex items-center">
+                <label htmlFor="open" className="px-4 py-2 text-start">Status</label>
+                {
+                    !isEditing
+                       ? <p>{`${schedule.open ? "Buka" : "Tutup"}`}</p>
+                       : <Field component="select" name="open" id="open" className="text-xs border border-gray-300 rounded text-gray-600 h-8 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+                            <option value={true}>Buka</option>
+                            <option value={false}>Tutup</option>
+                        </Field>
+                }
+            </div>
+        </TableTitle>
+          <Table key={schedule.id}>
               <TableHeader>
                 <TableHead title="Jam"/>
                 <TableHead title="Slot"/>
               </TableHeader>
               <TableBody>
-                <Formik
-                  initialValues={{
-                    slot: schedule.timeslot.slot
-                  }}
-                >
                 <FieldArray
                   name="slot"
                   render={ () => (
@@ -63,17 +81,19 @@ export default function SlotTable({ schedule }) {
                         return (
                           <TableRow key={each.name}>
                             <TimeTableCell value={each.name}/>
-                            { isEditing ? <RegularInput name={`slot.${[index]}.totalSlot`} inputType="number" showLabel={false}/> : <TableCell value={val}/> }
+                            { isEditing ? <RegularInput name={`slot.${[index]}.totalSlot`} inputType="number" showLabel={false} size="small"/> : <TableCell value={val}/> }
                           </TableRow>
                         );
                       })
                     )
                   }
                 />
-                </Formik>
+
               </TableBody>
           </Table>
       </div>
+          </Form>
+      </Formik>
   );
 }
 
