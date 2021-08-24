@@ -11,13 +11,19 @@ import TableCell from "./TableCell";
 import TableHead from "./TableHead";
 import RegularInput from "../Inputs/RegularInput";
 
+import { useMutation } from "@apollo/client";
+import { UPDATE_SCHEDULE } from "../../services/graphql/mutations/uddMutations";
+import { GET_UDD_SCHEDULE } from "../../services/graphql/queries/uddQueries";
 
 export default function SlotTable({ schedule }) {
 
   const [isEditing, setIsEditing] = useState(false);
+
   const handleEditMode = () => {
     setIsEditing(!isEditing);
   }
+
+  const [updateSchedule, { loading, error, data }] = useMutation(UPDATE_SCHEDULE);
 
   const TimeTableCell = ({value}) => {
     return (
@@ -33,11 +39,20 @@ export default function SlotTable({ schedule }) {
   return (
       <Formik
           initialValues={{
-              slot: schedule.timeslot.slot,
+              timeslot: schedule.timeslot,
               open: schedule.open
           }}
           onSubmit={ values => {
-              alert(JSON.stringify(values, null, 2));
+              const { timeslot, open } = valus;
+              const { id, day } = schedule;
+              updateSchedule({
+                  variables: {
+                      scheduleId: id,
+                      open: open,
+                      timeslot: timeslot,
+                  },
+                  refetchQueries: [{query: GET_UDD_SCHEDULE }]
+              })
           }}
   >
           <Form>
@@ -50,7 +65,7 @@ export default function SlotTable({ schedule }) {
           buttonText={!isEditing ? "Simpan" : "Ubah"}
           buttonColor={schedule.editable ? "yellow" : null}
           handleButtonClick={handleEditMode}
-          disableButton={!schedule.editable || !schedule.open}
+          disableButton={!schedule.editable}
           buttonType={!isEditing ? "submit" : "button"}
           >
             {/*TODO : kalo ubah, ganti jadi dropdown option*/}
@@ -81,7 +96,7 @@ export default function SlotTable({ schedule }) {
                         return (
                           <TableRow key={each.name}>
                             <TimeTableCell value={each.name}/>
-                            { isEditing ? <RegularInput name={`slot.${[index]}.totalSlot`} inputType="number" showLabel={false} size="small"/> : <TableCell value={val}/> }
+                            { isEditing ? <RegularInput name={`timeslot.slot.${[index]}.totalSlot`} inputType="number" showLabel={false} size="small"/> : <TableCell value={val}/> }
                           </TableRow>
                         );
                       })
