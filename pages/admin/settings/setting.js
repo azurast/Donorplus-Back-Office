@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types"
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
@@ -6,26 +6,6 @@ import { GET_UDD_SCHEDULE } from "../../../services/graphql/queries/uddQueries";
 
 import Admin from "layouts/Admin"
 import SlotTable from "../../../components/Table/SlotTable";
-
-const days = {
-    monday: "Monday",
-    tuesday: "Tuesday",
-    wednesday: "Wednesday",
-    thursday: "Thursday",
-    friday: "Friday",
-    saturday: "Saturday",
-    sunday: "Sunday"
-}
-const sorter = {
-    "Monday" : 1,
-    "Tuesday": 2,
-    "Wednesday": 3,
-    "Thursday": 4,
-    "Friday": 5,
-    "Saturday": 6,
-    "Sunday": 7
-}
-
 
 export default function Setting() {
 
@@ -59,11 +39,6 @@ export default function Setting() {
         </div>
     );
 }
-
-Setting.getInitialProps = async () => {
-    console.log
-}
-
 
 Setting.layout = Admin;
 
