@@ -6,8 +6,8 @@ const TableTitle = (props) => {
   return (
     <div className="rounded-t mb-0 px-4 py-3 border-0">
       <div className="flex flex-wrap items-center">
-        <div className="flex flex-wrap w-full">
-          <div className="w-1/2">
+        <div className="flex flex-wrap w-full justify-between">
+          <div className="flex w-1/2 justify-start">
             <h3
               className={
                 "font-semibold text-lg " +
@@ -19,9 +19,9 @@ const TableTitle = (props) => {
           </div>
           {
             showButton
-              ? <div className="w-1/2">
+              ? <div className="flex w-1/2 justify-end">
                 <button
-                  className={(buttonColor ? "bg-"+ buttonColor +"-500 active:bg-"+ buttonColor +"-500 text-white" : " bg-blueGray-400 active:bg-blueGray-400 text-white " )+" font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
+                  className={(buttonColor ? "bg-"+ buttonColor +"-500 active:bg-"+ buttonColor +"-500 text-white" : " bg-blueGray-400 active:bg-blueGray-400 text-white " )+" font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"}
                   type={buttonType ? buttonType : "button"}
                   onClick={handleButtonClick}
                   disabled={disableButton}

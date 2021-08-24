@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types"
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
@@ -7,9 +7,30 @@ import { GET_UDD_SCHEDULE } from "../../../services/graphql/queries/uddQueries";
 import Admin from "layouts/Admin"
 import SlotTable from "../../../components/Table/SlotTable";
 
+const days = {
+    monday: "Monday",
+    tuesday: "Tuesday",
+    wednesday: "Wednesday",
+    thursday: "Thursday",
+    friday: "Friday",
+    saturday: "Saturday",
+    sunday: "Sunday"
+}
+const sorter = {
+    "Monday" : 1,
+    "Tuesday": 2,
+    "Wednesday": 3,
+    "Thursday": 4,
+    "Friday": 5,
+    "Saturday": 6,
+    "Sunday": 7
+}
+
+
 export default function Setting() {
 
     const {data, loading, error} = useQuery(GET_UDD_SCHEDULE);
+    var allSchedule = []
 
     if (loading) {
         return <h2>Loading</h2>
@@ -20,17 +41,29 @@ export default function Setting() {
         return null;
     }
 
-    const allSchedule = data.getAllJadwal
+    if (data) {
+        allSchedule = data.getAllJadwal.slice();
+        // var test = allSchedule.slice()
+        allSchedule.sort(function(a, b){
+            return a.dayInt - b.dayInt;
+        });
+    }
+
     return(
-        <div className="flex">
+        <div className="flex flex-row flex-wrap">
             {
                 allSchedule.map((each) => {
-                    return (<SlotTable schedule={each}/>);
+                    return (<SlotTable schedule={each} key={each.id}/>);
                 })
             }
         </div>
     );
 }
+
+Setting.getInitialProps = async () => {
+    console.log
+}
+
 
 Setting.layout = Admin;
 

@@ -3,6 +3,9 @@ scalar Date
 # The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 scalar JSON
 
+# The `Upload` scalar type represents a file upload.
+scalar Upload
+
 type Pendonor {
     id: String
     fullName: String!
@@ -62,6 +65,8 @@ type Activity {
     donorType: String
     interviewNotes: String
     antibodyLevel: String
+    queue: String
+    slot: String
     passForm: Boolean
     didSchedule: Boolean
     didInterview: Boolean
@@ -94,19 +99,8 @@ type Pmi {
     langitude: String
     longitude: String
     activitys: [Activity!]!
-    timeslots: [Timeslot!]!
     adminPmis: [AdminPmi!]!
     jadwals: [Jadwal!]!
-    createdAt: Date
-}
-
-type Timeslot {
-    id: String
-    branch: Pmi!
-    branchId: String!
-    type: String
-    timeSlot: String
-    totalSlot: Int
     createdAt: Date
 }
 
@@ -127,9 +121,24 @@ type Jadwal {
     branch: Pmi!
     branchId: String!
     day: String
+    dayInt: Int
     open: Boolean
     editable: Boolean
     timeslot: JSON
+}
+
+type Object {
+    url: String!
+    key: String!
+}
+
+type Response {
+    success: Boolean!
+    message: String!
+}
+
+type TotalQueue {
+    count: Int
 }
 
 type Query {
@@ -138,6 +147,7 @@ type Query {
     getPendonorByIdentifier(identifier: String): Pendonor
     getAllPendonorDetail: [PendonorDetail]
     getPendonorDetail(pendonorId: String): PendonorDetail
+    updateLockedData: [PendonorDetail]
     getAllPmi: [Pmi]
     getPmi(id: String): Pmi
     getAllActivity: [Activity]
@@ -145,15 +155,14 @@ type Query {
     getActivityForInterview: [Activity]
     getActivityForBloodTest: [Activity]
     getActivityForDonor: [Activity]
-    getAllTimeslot: [Timeslot]
-    getTimeslotById(id: String): Timeslot
-    getTimeslotByBranch(branchId: String): [Timeslot]
-    getTimeslotByIdAndBranch(id: String, branchId: String): Timeslot
     getAllAdminPmi: [AdminPmi]
     getAdminPmiById(id: String): AdminPmi
     getAdminPmiByBranch(branchId: String): [AdminPmi]
     getAdminPmiByIdAndBranch(id: String, branchId: String): AdminPmi
     getAllJadwal: [Jadwal]
+    getJadwalById(id: String): Jadwal
+    fetchBuckets: [String!]!
+    fetchObjects(bucketName: String): [Object!]!
 }
 
 type Mutation {
@@ -288,6 +297,8 @@ type Mutation {
         donorType: String
         interviewNotes: String
         antibodyLevel: String
+        queue: String
+        slot: String
         passForm: Boolean
         didSchedule: Boolean
         didInterview: Boolean
@@ -320,6 +331,8 @@ type Mutation {
         donorType: String
         interviewNotes: String
         antibodyLevel: String
+        queue: String
+        slot: String
         passForm: Boolean
         didSchedule: Boolean
         didInterview: Boolean
@@ -347,20 +360,7 @@ type Mutation {
         didScheduleTestAt: Date
         didDonorAt: Date
     ): Activity
-    addTimeslot(
-        branchId: String
-        type: String
-        timeSlot: String
-        totalSlot: Int
-        createdAt: Date
-    ): Timeslot
-    updateTimeslot(
-        id: String
-        type: String
-        timeSlot: String
-        totalSlot: Int
-        createdAt: Date
-    ): Timeslot
+    updateScheduleStatus(id: String, didSchedule: Boolean): Activity
     addAdminPmi(
         branchId: String
         fullname: String
@@ -380,8 +380,27 @@ type Mutation {
     addJadwal(
         branchId: String
         day: String
+        dayInt: Int
         open: Boolean
         editable: Boolean
         timeslot: JSON
     ): Jadwal
+    updateJadwals(
+        id: String
+        day: String
+        dayInt: Int
+        open: Boolean
+        editable: Boolean
+        timeslot: JSON
+    ): Jadwal
+    createBucket(bucketName: String!): Response
+    uploadObject(file: Upload!, fileName: String!, bucketName: String!): Object
+    uploadObjects(
+        files: [Upload!]!
+        fileNames: String!
+        bucketName: String!
+    ): [Object!]!
+    deleteObject(bucketName: String!, key: String!): Response
+    deleteObjects(bucketName: String!, objectKeys: [String!]!): Response
+    deleteBucket(bucketName: String!): Response
 }

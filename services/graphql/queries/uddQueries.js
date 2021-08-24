@@ -29,6 +29,7 @@ const GET_UDD_SCHEDULE = gql`
     getAllJadwal {
       branchId
       id
+      dayInt
       day
       open
       editable
