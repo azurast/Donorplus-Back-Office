@@ -18,7 +18,7 @@ export default function Index() {
 
   const login = () => {
     // TODO : authenticate to BE & return role
-    localStorage.setItem("currentUser", "superadmincabang");
+    localStorage.setItem("currentUser", "superadminpusat");
   }
 
   const router = useRouter()

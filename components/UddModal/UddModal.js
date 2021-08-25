@@ -28,7 +28,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
     <>
       {showModal ? (
         <>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black">
+        <div className="flex fixed inset-0 z-40 bg-black w-full h-full opacity-80 left-0 top-0"></div>
             <div
               className="justify-center items-center flex overflow-x-hidden overflow-y-auto md:px-10 fixed inset-0 z-50 outline-none focus:outline-none"
             >
@@ -84,6 +84,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                                 name="uddName"
                                 label="Nama UDD"
                                 placeholder="Nama UDD"
+                                showLabel={true}
                               />
                               {/*<RegularInput*/}
                               {/*  inputType="number"*/}
@@ -96,12 +97,14 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                                 name="uddLangitude"
                                 label="Langitude"
                                 placeholder="0"
+                                showLabel={true}
                               />
                               <RegularInput
                                 inputType="text"
                                 name="uddLongitude"
                                 label="Longitude"
                                 placeholder="0"
+                                showLabel={true}
                               />
                               <TextareaInput
                                 label="Alamat"
@@ -126,7 +129,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                           Close
                         </button>
                         <button
-                          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 mx-4 my-4 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="submit"
                         >
                           { modalType === "add" ? "Tambah" : "Perbaharui" }
@@ -137,7 +140,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                 </Form>
               </Formik>
               </div>
-          </div>
+          {/*</div>*/}
         </>
       ) : null}
     </>
