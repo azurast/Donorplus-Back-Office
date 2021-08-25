@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {Formik, Form, FieldArray, Field} from "formik";
-import {Formik, Form, FieldArray, Field} from "formik";
 import * as Yup from 'yup';
 
 import TableContainer from "./TableContainer";
