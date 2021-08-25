@@ -35,6 +35,7 @@ const TableCell = ({ type, value, buttonColor, buttonIcon, onButtonClick, onTdCl
               </>
             : <> {value} </>
       }
+      {children}
     </td>
   );
 }
