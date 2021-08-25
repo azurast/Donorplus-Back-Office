@@ -25,12 +25,21 @@ const GET_DONOR_DETAIL = gql`
         email
         activitys {
           branch {
-            branchName,
+            branchName
           }
           donorType
           interviewNotes
           antibodyLevel
           didDonorAt
+          didDonor
+          didBloodTestAt
+          didBloodTest
+          didInterviewAt
+          didInterview
+          didScheduleAt
+          didSchedule
+          antibodyLevel
+          interviewNotes
         }
       }
       sex
