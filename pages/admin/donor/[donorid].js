@@ -5,6 +5,7 @@ import { Formik, Form } from "formik";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_DONOR_DETAIL } from "../../../services/graphql/queries/donorQueries";
 import { UPDATE_DONORS_DETAIL } from "../../../services/graphql/mutations/donorMutations";
+import { ParseDate } from "../../../helpers/date-helper";
 import Admin from "../../../layouts/Admin";
 import Table from "../../../components/Table/Table";
 import TableHead from "../../../components/Table/TableHead";
@@ -74,6 +75,11 @@ export default function DonorDetail() {
     email,
     activitys
   } = pendonor;
+
+  console.log('===activities', activitys);
+  // const {
+  //
+  // } = activitys
 
   const Stepper = ({status, label, date}) => {
     return (
@@ -154,13 +160,17 @@ export default function DonorDetail() {
           >
             <Form>
               <div className="flex flex-row">
-                <h1 className="font-semibold text-lg text-blueGray-700 pb-2">{fullName}</h1>
-                <button
-                  className={"bg-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
-                  type="submit"
-                >
-                  <i className="fas fa-save px-2 text-emerald-500"/>
-                </button>
+                <div className="flex w-1/2 justify-start">
+                  <h1 className="font-semibold text-lg text-blueGray-700 pb-2">{fullName}</h1>
+                </div>
+                <div className="flex w-1/2 justify-end">
+                  <button
+                    className={"bg-yellow-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
+                    type="submit"
+                  >
+                    <i className="fas fa-save px-2 text-white"/>
+                  </button>
+                </div>
               </div>
               <div className="divide-y">
                 <div>
@@ -270,45 +280,45 @@ export default function DonorDetail() {
                 <TableHead title="Nomor"/>
                 <TableHead title="Tanggal"/>
                 <TableHead title="Tempat"/>
-                <TableHead title="Jumlah Kantong"/>
+                <TableHead title="TipeDonor"/>
               </TableHeader>
               <TableBody>
                 {
-                  activitys.map(activity => {
-                    const { branch } = activity;
+                  activitys.map((activity, index) => {
+                    const { branch, donorType, interviewNotes, antibodyLevel, didDonorAt } = activity;
                     return (
                       <>
                         <TableRow>
-                          <TableCell value="idx" type="text"/>
-                          <TableCell value="idx" type="text"/>
+                          <TableCell value={++index} type="text"/>
+                          <TableCell value={ParseDate(new Date(didDonorAt))} type="text"/>
                           <TableCell value={branch.branchName} type="text"/>
-                          <TableCell value="idx" type="text"/>
+                          <TableCell value={donorType} type="text"/>
                         </TableRow>
-                        <div className="flex flex-auto">
-                          <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              CATATAN WAWANCARA
-                            </h1>
-                            <p>
-                              dfnsdjfbdjshfbsdfjbsdjfbsdhjfbsdjfhbsdhjfbsjdfbsjdfhbjsh
-                            </p>
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              HASIL TES DARAH
-                            </h1>
-                            <p>
-                              {/*<Row label="Titer Antibodi" value="250"/>*/}
-                            </p>
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              PERJALANAN
-                            </h1>
-                            <div className="flex flex-col">
-                              <Stepper label="Skrining Formulir" date="22/06/07" status={true} />
-                              <Stepper label="Wawancara" date="22/06/07" status={true} />
-                              <Stepper label="Tes Darah" date="22/06/07" status={true} />
-                              <Stepper label="Donor Darah" date="22/06/07" status={true} />
-                            </div>
-                          </div>
-                        </div>
+                        {/*<div className="flex flex-auto">*/}
+                        {/*  <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">*/}
+                        {/*    <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">*/}
+                        {/*      CATATAN WAWANCARA*/}
+                        {/*    </h1>*/}
+                        {/*    <p>*/}
+                        {/*      dfnsdjfbdjshfbsdfjbsdjfbsdhjfbsdjfhbsdhjfbsjdfbsjdfhbjsh*/}
+                        {/*    </p>*/}
+                        {/*    <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">*/}
+                        {/*      HASIL TES DARAH*/}
+                        {/*    </h1>*/}
+                        {/*    <p>*/}
+                        {/*      /!*<Row label="Titer Antibodi" value="250"/>*!/*/}
+                        {/*    </p>*/}
+                        {/*    <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">*/}
+                        {/*      PERJALANAN*/}
+                        {/*    </h1>*/}
+                        {/*    <div className="flex flex-col">*/}
+                        {/*      <Stepper label="Skrining Formulir" date="22/06/07" status={true} />*/}
+                        {/*      <Stepper label="Wawancara" date="22/06/07" status={true} />*/}
+                        {/*      <Stepper label="Tes Darah" date="22/06/07" status={true} />*/}
+                        {/*      <Stepper label="Donor Darah" date="22/06/07" status={true} />*/}
+                        {/*    </div>*/}
+                        {/*  </div>*/}
+                        {/*</div>*/}
                       </>
                     );
                   })
