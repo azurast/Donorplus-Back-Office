@@ -29,6 +29,7 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
     <>
       {showModal ? (
         <>
+          <div className="flex fixed inset-0 z-40 bg-black w-full h-full opacity-80 left-0 top-0"></div>
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto md:px-10 fixed inset-0 z-50 outline-none focus:outline-none"
           >
@@ -91,18 +92,21 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                               name="adminName"
                               label="Nama Admin"
                               placeholder="Nama Admin"
+                              showLabel={true}
                             />
                             <RegularInput
                               inputType="email"
                               name="adminEmail"
                               label="Email Admin"
                               placeholder="test@example.com"
+                              showLabel={true}
                             />
                             <RegularInput
                               inputType="password"
                               name="adminPassword"
                               label="Password Admin"
                               placeholder="********"
+                              showLabel={true}
                             />
                             {/* TODO : CREATE DROPDOWN */}
                             <RegularInput
@@ -110,6 +114,7 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                               name="adminRole"
                               label="Role Admin"
                               placeholder="Superadmin"
+                              showLabel={true}
                             />
                             {/* TODO : SPREAD STATUS */}
                             <CheckboxInput
