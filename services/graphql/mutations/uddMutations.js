@@ -65,7 +65,6 @@ const UPDATE_UDD = gql`
     }
   }
 `
-
 const UPDATE_ADMIN = gql`
   mutation updateAdminPmi(
     $adminId: String!,
@@ -89,10 +88,26 @@ const UPDATE_ADMIN = gql`
     }
   }
 `
+const UPDATE_SCHEDULE = gql`
+  mutation updateJadwals(
+    $scheduleId: String!,
+    $open: Boolean!,
+    $timeslot: JSON!
+  ) {
+    updateJadwals(
+      id: $scheduleId,
+      open: $open,
+      timeslot: $timeslot
+    ) {
+      id
+    }
+  }
+`
 
 export {
   CREATE_UDD,
   CREATE_ADMIN,
   UPDATE_UDD,
-  UPDATE_ADMIN
+  UPDATE_ADMIN,
+  UPDATE_SCHEDULE
 };
