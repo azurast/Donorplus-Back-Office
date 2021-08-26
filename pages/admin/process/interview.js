@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_INTERVIEW_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
 import { UPDATE_INTERVIEW } from "../../../services/graphql/mutations/activityMutations";
+import { sendPushNotification } from "../../../services/push-notifications/push-notifications";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -59,6 +60,7 @@ export default function Interview() {
                 className={(passInterviewStatus == true ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
                     if (passInterviewStatus == false) {
+
                         onActionButtonClick(activityId,true)
                     }
                 }}
@@ -97,6 +99,7 @@ export default function Interview() {
                         <TableHead title="Status"/>
                         {/*<TableHead title="Catatan"/>*/}
                         <TableHead title="Aksi"/>
+                        <button onClick={(e) => sendPushNotification(e, "fdxRm0ySXkykmkkr5UZgJM:APA91bFXEF-kmCHPlsASUBfkdj3j6jC1E0_jh3ktR4lJdIyeSKZr4s0cjSLs5Vdc4l3iRPVCw9l4-_0s9wTMuQ-xWum6BBNpyAKpTS1geHO-x3BhMATdNzKOvrxgwM0QfTyU1Urcz1kL", "interviewSuccess")}>TEST</button>
                     </TableHeader>
                     <TableBody>
                         {

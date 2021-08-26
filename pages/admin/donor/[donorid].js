@@ -291,6 +291,7 @@ export default function DonorDetail() {
                     didInterviewAt, didInterview,
                     didScheduleAt, didSchedule,
                   } = activity;
+                  activity.toggle = false;
                   return (
                     <>
                       <TableRow>
@@ -305,7 +306,7 @@ export default function DonorDetail() {
                         </TableCell>
                       </TableRow>
                       {
-                        toggle
+                        activity.toggle
                           ? <td colSpan={5}>
                             <div className="flex flex-auto">
                               <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
