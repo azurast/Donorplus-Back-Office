@@ -20,6 +20,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
   }
 
   if (error) {
+    // alert(JSON.stringify(error, null, 2));
     console.error(error)
     return null;
   }
@@ -35,18 +36,22 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
               <Formik
                 initialValues={{
                   uddName: udd.branchName || '',
+                  uddPhoneNumber: udd.phoneNumber || '',
                   uddAddress: udd.branchAddress || '',
                   uddLangitude: udd.langitude || '',
                   uddLongitude: udd.longitude || '',
-                  uddStatus: udd.status || false
+                  uddAvailability: udd.availability || "Tidak Tersedia"
                 }}
                 onSubmit={(values) => {
-                  const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddStatus } = values;
+                  const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddAvailability } = values;
                   createUdd({
                     variables: {
                       branchId: udd.id,
                       branchName: uddName,
                       branchSize: "Besar",
+                      branchPhoneNumber: uddPhoneNumber,
+                      branchAvailability: uddAvailability,
+                      // branchStatus: uddStatus,
                       branchAddress: uddAddress,
                       langitude: uddLangitude,
                       longitude: uddLongitude,
@@ -80,41 +85,49 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                           <div className="w-full lg:w-1 px-4">
                             <div className="relative w-full mb-3">
                               <RegularInput
-                                inputType="text"
+                                tType="text"
                                 name="uddName"
                                 label="Nama UDD"
                                 placeholder="Nama UDD"
                                 showLabel={true}
                               />
-                              {/*<RegularInput*/}
-                              {/*  inputType="number"*/}
-                              {/*  name="uddPhoneNumber"*/}
-                              {/*  label="Nomor Telepon"*/}
-                              {/*  placeholder="021-xxx-xxx"*/}
-                              {/*/>*/}
                               <RegularInput
-                                inputType="text"
+                                type="tel"
+                                name="uddPhoneNumber"
+                                label="Nomor Telepon"
+                                placeholder="021-xxx-xxx"
+                                showLabel={true}
+                              />
+                              <RegularInput
+                                type="text"
                                 name="uddLangitude"
                                 label="Langitude"
                                 placeholder="0"
                                 showLabel={true}
                               />
                               <RegularInput
-                                inputType="text"
+                                type="text"
                                 name="uddLongitude"
                                 label="Longitude"
                                 placeholder="0"
                                 showLabel={true}
+                              />
+                              <RegularInput
+                                  type="text"
+                                  name="uddAvailability"
+                                  label="Jam Buka"
+                                  placeholder="08:00 - ..."
+                                  showLabel={true}
                               />
                               <TextareaInput
                                 label="Alamat"
                                 name="uddAddress"
                                 placeholder="Jalan Gunung Merapi no 25.G"
                               />
-                              <CheckboxInput
-                                label="Keaktifan"
-                                name="uddStatus"
-                              />
+                              {/*<CheckboxInput*/}
+                              {/*  label="Keaktifan"*/}
+                              {/*  name="uddStatus"*/}
+                              {/*/>*/}
                             </div>
                           </div>
                         </div>

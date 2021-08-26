@@ -63,6 +63,7 @@ export default function UddDetail() {
             buttonText="Tambah Admin"
             buttonColor="emerald"
             handleButtonClick={() => {
+              setSelectedAdmin({})
               setModalType("add");
               setShowModal(true);
             }}

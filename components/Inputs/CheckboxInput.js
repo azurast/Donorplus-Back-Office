@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Formik, Form, useField } from 'formik';
+import { Formik, Form, useField, Field } from 'formik';
 
 const CheckboxInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -12,11 +12,11 @@ const CheckboxInput = ({ label, ...props }) => {
       >
         {label}
       </label>
-      <input
-        type="checkbox"
-        {...field}
-        {...props}
-      />
+        <Field
+            type="checkbox"
+           {...field}
+           {...props}
+        />
     </>
   );
 }

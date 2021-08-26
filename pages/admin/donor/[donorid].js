@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
@@ -129,7 +129,7 @@ export default function DonorDetail() {
             domisiliKecamatan,
             domisiliKelurahan,
             domisiliAddress,
-            riwayatHami : riwayatHamil ? "Ya" : "Tidak",
+            riwayatHamil : riwayatHamil ? "Ya" : "Tidak",
             riwayatCovid : riwayatCovid ? "Ya" : "Tidak",
             riwayatKeluhan,
             riwayatKomorbid,
@@ -299,14 +299,14 @@ export default function DonorDetail() {
                         <TableCell value={branch.branchName} type="text"/>
                         <TableCell value={donorType} type="text"/>
                         <TableCell className="text-center">
-                          <button>
-                            <i className="fas fa-chevron-down text-blueGray-500"/>
+                          <button onClick={() => setToggle(!toggle)}>
+                            <i className={"fas fa-chevron-"+(toggle ? "up" : "down")+" text-blueGray-500"}/>
                           </button>
                         </TableCell>
                       </TableRow>
                       {
                         toggle
-                          ? <td colSpan={4}>
+                          ? <td colSpan={5}>
                             <div className="flex flex-auto">
                               <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
                                 <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
