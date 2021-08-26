@@ -88,7 +88,9 @@ export default function Interview() {
                 <TableTitle
                   titleText="Daftar Pendonor Wawancara"
                   showButton={false}
-                />
+                >
+                    <button onClick={(e) => sendPushNotification(e, "fdxRm0ySXkykmkkr5UZgJM:APA91bFXEF-kmCHPlsASUBfkdj3j6jC1E0_jh3ktR4lJdIyeSKZr4s0cjSLs5Vdc4l3iRPVCw9l4-_0s9wTMuQ-xWum6BBNpyAKpTS1geHO-x3BhMATdNzKOvrxgwM0QfTyU1Urcz1kL", "interviewSuccess")}>TEST</button>
+                </TableTitle>
                 <Table>
                     <TableHeader>
                         <TableHead title="Nomor Antrian"/>
@@ -99,7 +101,6 @@ export default function Interview() {
                         <TableHead title="Status"/>
                         {/*<TableHead title="Catatan"/>*/}
                         <TableHead title="Aksi"/>
-                        <button onClick={(e) => sendPushNotification(e, "fdxRm0ySXkykmkkr5UZgJM:APA91bFXEF-kmCHPlsASUBfkdj3j6jC1E0_jh3ktR4lJdIyeSKZr4s0cjSLs5Vdc4l3iRPVCw9l4-_0s9wTMuQ-xWum6BBNpyAKpTS1geHO-x3BhMATdNzKOvrxgwM0QfTyU1Urcz1kL", "interviewSuccess")}>TEST</button>
                     </TableHeader>
                     <TableBody>
                         {
