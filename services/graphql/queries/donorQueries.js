@@ -16,7 +16,7 @@ const GET_ALL_DONORS = gql`
 `
 
 const GET_DONOR_DETAIL = gql`
-  query getAllDonors($donorId: String!) {
+  query getDonorDetail($donorId: String!) {
     getPendonorDetail(pendonorId: $donorId) {
       id
       pendonor {
@@ -27,6 +27,19 @@ const GET_DONOR_DETAIL = gql`
           branch {
             branchName
           }
+          donorType
+          interviewNotes
+          antibodyLevel
+          didDonorAt
+          didDonor
+          didBloodTestAt
+          didBloodTest
+          didInterviewAt
+          didInterview
+          didScheduleAt
+          didSchedule
+          antibodyLevel
+          interviewNotes
         }
       }
       sex

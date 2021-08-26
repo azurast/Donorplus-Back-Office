@@ -59,9 +59,9 @@ export default function BloodTest() {
             onClick={(e) => e.stopPropagation()}
           >
               <button
-                className={(passBloodTestStatus !== null ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={(passBloodTestStatus == true ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
-                    if (passBloodTestStatus == null) {
+                    if (passBloodTestStatus == false) {
                         onActionButtonClick(activityId,true)
                     }
                 }}
@@ -69,9 +69,9 @@ export default function BloodTest() {
                   Lolos
               </button>
               <button
-                className={(passBloodTestStatus !== null ? "cursor-not-allowed bg-red-400 active:bg-red-500 " : "bg-red-500 active:bg-red-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={(passBloodTestStatus == true ? "cursor-not-allowed bg-red-400 active:bg-red-500 " : "bg-red-500 active:bg-red-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
-                    if (passBloodTestStatus == null) {
+                    if (passBloodTestStatus == false) {
                         onActionButtonClick(activityId,false)
                     }
                 }}

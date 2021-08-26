@@ -77,7 +77,7 @@ export default function Sidebar() {
             </div>
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {/* UDD & PENDONOR */}
-              { role == "superadminpusat" || role == "superadmincabang" || role == "adminreg"
+              { role == "superadminpusat" || role == "superadmincabang" || role == "adminreguler"
                 ? <>
                     <li className="items-center">
                       <Link href={{ pathname: "/admin/udd", query: { role }}}>
@@ -130,7 +130,7 @@ export default function Sidebar() {
                 : <></>
               }
               {/* WAWANCARA, TES DARAH, DONOR PLASMA */}
-              { role == "superadmincabang" || role == "adminreg"
+              { role == "superadmincabang" || role == "adminreguler"
                 ? <>
                   <li className="items-center">
                     <Link href="/admin/process/interview">

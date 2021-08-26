@@ -53,7 +53,7 @@ export default function PlasmaDonor() {
             onClick={(e) => e.stopPropagation()}
           >
               <button
-                className={( didDonorStatus == false ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-lightBlue-500 active:bg-lightBlue-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={( didDonorStatus == true ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-lightBlue-500 active:bg-lightBlue-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
                     if (!didDonorStatus) {
                         onActionButtonClick(activityId,true)

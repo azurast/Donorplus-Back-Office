@@ -5,6 +5,9 @@ const CREATE_UDD = gql`
     $branchName: String!,
     $branchSize: String!,
     $branchAddress: String!,
+    $branchPhoneNumber: String!,
+#    $branchStatus: String!,
+    $branchAvailability: String!,
     $langitude: String!,
     $longitude: String!,
     ) {
@@ -12,12 +15,16 @@ const CREATE_UDD = gql`
         branchName: $branchName,
         branchSize: $branchSize,
         branchAddress: $branchAddress,
+        phoneNumber: $branchPhoneNumber,
+        availability: $branchAvailability,
         langitude: $langitude,
         longitude: $longitude
       ) {
         branchName,
         branchSize,
         branchAddress
+        phoneNumber,
+        availability
       }
     }
 `

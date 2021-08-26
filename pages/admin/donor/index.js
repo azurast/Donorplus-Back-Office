@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Link from "next/link";
+import { CalculateAge } from "../../../helpers/date-helper";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_DONORS } from "../../../services/graphql/queries/donorQueries";
@@ -15,7 +17,7 @@ import TableHeader from "../../../components/Table/TableHeader";
 import TableBody from "../../../components/Table/TableBody";
 import TableCell from "../../../components/Table/TableCell";
 
-import Link from "next/link";
+
 
 export default function Donors() {
 
@@ -36,10 +38,6 @@ export default function Donors() {
 
   const donors = data.getAllPendonor;
   console.log("===donors", donors);
-
-  const convertToAge = (dateOfBirth) => {
-
-  }
 
   const onTableRowClick = (id) => {
     console.log('===kepencet with id', id);
@@ -72,7 +70,7 @@ export default function Donors() {
               donors.map((donor, index) => {
                 const {id, fullName, pendonorDetails} = donor;
                 const {sex, dateOfBirth, bloodType, nik} = pendonorDetails || {};
-                const age = dateOfBirth;
+                const age = CalculateAge(new Date(dateOfBirth))
                 return (
                   <TableRow key={id} onClick={() => onTableRowClick(id)}>
                     <TableCell value={++index} type="text"/>
