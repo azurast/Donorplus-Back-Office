@@ -29,7 +29,7 @@ const sendPushNotification = async (event,  fcmToken, type) => {
         headers: {
             "Content-Type": "application/json",
             // TODO PUT BEARER TOKEN IN ENV
-            "Authorization": "Bearer AAAALb4Cpms:APA91bF6fXvR1rEeMWUr2RWJJ-spN73rNlBeL_dy709oR1wrhwo8zSPoOiE2IvOJ5GdOQYYYZFTiKBpU_RO4jbYA30wab8M_nBYA5cazqGM-xcQXPzphgw2nAwqUCIPHu_7bJB2dUZHn"
+            "Authorization": `Bearer ${process.env.firebaseServerKey}`
         },
         body: JSON.stringify({
             "to": fcmToken,
