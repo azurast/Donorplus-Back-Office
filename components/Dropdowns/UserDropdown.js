@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { createPopper } from "@popperjs/core";
 
 const UserDropdown = () => {
@@ -15,6 +16,14 @@ const UserDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+
+  const router = useRouter()
+  const logout = () => {
+    localStorage.setItem("currentUser", "");
+    localStorage.setItem("currentBranch", "");
+    router.push({pathname: "/"});
+  }
+
   return (
     <>
       <a
@@ -48,7 +57,7 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={() => logout()}
         >
             <i className={"fas fa-sign-out-alt mr-2 text-sm opacity-75"}></i>
           Keluar

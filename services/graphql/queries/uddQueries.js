@@ -1,5 +1,18 @@
 import { gql } from "@apollo/client"
 
+const LOGIN = gql`
+  query login($email: String!, $password: String) {
+    login(email:$email, password:$password) {
+      branch {
+        id
+        branchName
+      }
+      role
+      status
+    }
+  }
+`
+
 const GET_ALL_UDDS = gql`
   query getAllUdd {
     getAllPmi {
@@ -39,6 +52,7 @@ const GET_UDD_SCHEDULE = gql`
 `
 
 export {
+  LOGIN,
   GET_ALL_UDDS,
   GET_UDD_ADMINS,
   GET_UDD_SCHEDULE
