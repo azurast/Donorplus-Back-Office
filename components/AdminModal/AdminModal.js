@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types"
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { useMutation } from "@apollo/client";
 import { CREATE_ADMIN, UPDATE_ADMIN } from "../../services/graphql/mutations/uddMutations";
 import { GET_UDD_ADMINS } from "../../services/graphql/queries/uddQueries";
@@ -14,7 +14,7 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
 
   const mutation = modalType === "add" ? CREATE_ADMIN : UPDATE_ADMIN
   const [createAdmin, {data, loading, error}] = useMutation(mutation);
-  const [status, setStatus] = useState(admin.status);
+  const [status, setStatus] = useState(false);
 
   if (loading) {
     return <h2>Loading</h2>
@@ -42,7 +42,6 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                 adminStatus: admin.status || false
               }}
               onSubmit={(values, { setSubmitting }) => {
-                // alert(JSON.stringify(values, null, 2));
                 const { adminName, adminEmail, adminPassword, adminRole, adminStatus } = values;
                 createAdmin({
                   variables: {
@@ -75,7 +74,9 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                       </h3>
                       <button
                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => {
+                          setShowModal(false)
+                        }}
                       >
                         <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                           ×
@@ -116,12 +117,10 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                               placeholder="Superadmin"
                               showLabel={true}
                             />
-                            {/* TODO : SPREAD STATUS */}
-                            <CheckboxInput
-                              label="Keaktifan"
-                              name="adminStatus"
-                              checked={status}
-                              onChange={() => setStatus(!status)}
+                            {/* TODO : WRAP KE CHECKBOXINPUT.JS */}
+                            <Field
+                                type="checkbox"
+                                name="adminStatus"
                             />
                           </div>
                         </div>
