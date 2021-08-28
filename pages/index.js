@@ -20,38 +20,10 @@ function Redirect({ to }) {
   }, [to]);
 }
 
-// export function DelayedLogin() {
-//   const [loginAdmin, { loading, error, data}] = useLazyQuery(
-//       LOGIN, {
-//         variables: {
-//           email: "",
-//           password: "",
-//         },
-//       }
-//   );
-//
-//   if (error) {
-//     console.error(error);
-//   }
-//
-//   if (loading) {
-//     return <h2>Loading</h2>
-//   }
-//
-//    if (data) {
-//      alert(JSON.stringify(data, null, 2));
-//    }
-// }
-
 export default function Index() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const login = () => {
-    // TODO : authenticate to BE & return role
-    localStorage.setItem("currentUser", "superadminpusat");
-  }
 
   const router = useRouter()
   const [redirectPath, setRedirectPath] = useState("udd")

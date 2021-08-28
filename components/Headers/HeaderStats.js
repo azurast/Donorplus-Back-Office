@@ -7,7 +7,13 @@ import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats({ showCards }) {
 
-  const { data, loading, error } = useQuery(GET_ACTIVITY_STAGES_COUNT);
+  const branchId = localStorage.getItem("currentBranch");
+
+  const { data, loading, error } = useQuery(GET_ACTIVITY_STAGES_COUNT, {
+    variables: {
+      branchId: branchId
+    }
+  });
 
   if (loading) {
     return <h2>Loading</h2>

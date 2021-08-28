@@ -1,29 +1,40 @@
-const sendPushNotification = async (event,  fcmToken, type) => {
+const sendPushNotification = async (fcmToken, type) => {
     var body, title = "";
 
-    // TODO CREATE SWITCH CASES FOR EACH TYPE
-    /*
-    *   Types :
-    *       Sukses Interview
-    *       Gagal Interview
-    *       Suskses Tes Darah
-    *       Gagal Tes Darah
-    *       Sukses Donor
-    *       Gagal Donor
-    *       Cancel Donor
-    * */
-    // switch (type) {
-    //     case "interviewSuccess":
-    //         body = "Yayyy kamu sukses interpiu",
-    //         title = "SUkses bRO"
-    //     break;
-    // }
-    if (type == "interviewSuccess") {
-        body = "Yayyy kamu sukses interpiu",
-        title = "SUkses bRO"
+    var title, body = "";
+
+    console.log('===type', type);
+
+    switch (type) {
+        case "interviewSuccess" :
+            title = "Selamat!"
+            body = "Anda sukses melalui tahap wawancara"
+            break;
+        case "interviewFailed" :
+            title = "Maaf"
+            body = "Anda tidak lolos tahap wawancara"
+            break;
+        case "bloodtestSuccess" :
+            title = "Selamat!"
+            body = "Anda sukses melalui tes darah"
+            break;
+        case "bloodtestFailed" :
+            title = "Maaf!"
+            body = "Anda tidak lolos tahap tes darah"
+            break;
+        case "donorSuccess" :
+            title = "Terima kasih!"
+            body = "Anda telah berhasil mendonasikan plasma anda!"
+            break;
+        case "donorFailed" :
+            title = "Maaf"
+            body = "Anda belum berhasil mendonasikan plasma anda"
+            break;
+        default :
+            title = "default title";
+            body = "default body";
     }
 
-    event.preventDefault()
     const res = await fetch("https://fcm.googleapis.com/fcm/send", {
         method: "POST",
         headers: {

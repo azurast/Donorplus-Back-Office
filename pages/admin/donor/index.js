@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CalculateAge } from "../../../helpers/date-helper";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_DONORS } from "../../../services/graphql/queries/donorQueries";
+import { GET_ALL_DONORS, GET_ALL_BRANCH_DONORS } from "../../../services/graphql/queries/donorQueries";
 
 // COMPONENTS
 import Admin from "layouts/Admin";
@@ -22,10 +22,17 @@ import TableCell from "../../../components/Table/TableCell";
 export default function Donors() {
 
   const router = useRouter();
+  const branchId = localStorage.getItem("currentBranch");
   const { role } = router.query;
   console.log('===role', role);
 
-  const {data, loading, error} = useQuery(GET_ALL_DONORS);
+  const {data, loading, error} = role == "superadminpusat"
+                                  ? useQuery(GET_ALL_DONORS)
+                                  : useQuery(GET_ALL_BRANCH_DONORS, {
+                                    variables: {
+                                      branchId: branchId
+                                    }
+                                  });
 
   if (loading) {
     return <h2>Loading</h2>
@@ -36,7 +43,10 @@ export default function Donors() {
     return null;
   }
 
-  const donors = data.getAllPendonor;
+  const donors = role == "superadminpusat"
+      ? data.getAllPendonor
+      : data.getAllPendonorByBranch;
+
   console.log("===donors", donors);
 
   const onTableRowClick = (id) => {

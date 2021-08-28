@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_PLASMADONOR_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
 import { UPDATE_DONOR_PLASMA} from "../../../services/graphql/mutations/activityMutations";
+import { sendPushNotification } from "../../../services/push-notifications/push-notifications";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -17,7 +18,13 @@ import TableCell from "../../../components/Table/TableCell";
 
 export default function PlasmaDonor() {
 
-    const { data, loading, error } = useQuery(GET_PLASMADONOR_ACTIVITIES);
+    const branchId = localStorage.getItem("currentBranch");
+
+    const { data, loading, error } = useQuery(GET_PLASMADONOR_ACTIVITIES, {
+        variables: {
+            branchId: branchId
+        }
+    });
 
     const [updateDonorPlasma, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(UPDATE_DONOR_PLASMA)
 
@@ -32,9 +39,9 @@ export default function PlasmaDonor() {
 
     const listDonotPlasma = data.getActivityForDonor;
 
-    const onActionButtonClick = (activityId, didDonor) => {
-        console.log('===fjevkev');
+    const onActionButtonClick = (activityId, didDonor, fcmToken) => {
         const timestamp = new Date().toISOString();
+        const type = didDonor ? "donorSuccess" : "donorFailed"
         updateDonorPlasma({
             variables: {
                 activityId: activityId,
@@ -42,11 +49,17 @@ export default function PlasmaDonor() {
                 didDonorDate: timestamp,
                 didDonorShow: true
             },
-            refetchQueries: [{query: GET_PLASMADONOR_ACTIVITIES}]
-            })
+            refetchQueries: [{
+                query: GET_PLASMADONOR_ACTIVITIES,
+                variables: {
+                    branchId: branchId
+                }
+            }]
+        });
+        sendPushNotification(fcmToken, type);
     };
 
-    const ActionButtons = ({activityId, didDonorStatus}) => {
+    const ActionButtons = ({activityId, didDonorStatus, fcmToken}) => {
         return(
           <td
             className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
@@ -56,7 +69,7 @@ export default function PlasmaDonor() {
                 className={( didDonorStatus == true ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-lightBlue-500 active:bg-lightBlue-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
                     if (!didDonorStatus) {
-                        onActionButtonClick(activityId,true)
+                        onActionButtonClick(activityId, true, fcmToken)
                     }
                 }}
               >
@@ -87,7 +100,7 @@ export default function PlasmaDonor() {
                       {
                           listDonotPlasma.map((activity, index) => {
                               const { id, didScheduleTest, didScheduleTestAt, didDonor, didDonorAt, pendonor} = activity;
-                              const { fullName, pendonorDetails: { sex, dateOfBirth, bloodType }} = pendonor;
+                              const { fullName, fcm_token, pendonorDetails: { sex, dateOfBirth, bloodType }} = pendonor;
                               const date = new Date(didDonorAt).toTimeString().slice(0,5);
                               const status = !didDonor
                                 ? "Menunggu Donor"
@@ -100,7 +113,7 @@ export default function PlasmaDonor() {
                                     <TableCell value={sex} type="text"/>
                                     <TableCell value={bloodType} type="text"/>
                                     <TableCell value={status} type="label"/>
-                                    <ActionButtons activityId={id} didDonorStatus={didDonor}/>
+                                    <ActionButtons activityId={id} didDonorStatus={didDonor} fcmToken={fcm_token}/>
                                 </TableRow>
                               );
                           })

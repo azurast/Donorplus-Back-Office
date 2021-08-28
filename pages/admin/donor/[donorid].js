@@ -26,7 +26,17 @@ export default function DonorDetail() {
 
   const[updateDonor, { loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPDATE_DONORS_DETAIL)
 
-  const [ toggle, setToggle ] = useState(false)
+  const [shownDetails, setShownDetails] = useState({})
+
+  const toggleDetail = id => {
+    setShownDetails(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+    console.log('===shownDetails', shownDetails)
+  };
+
+
 
   if (loading || mutationLoading) {
     return <h2>Loading</h2>
@@ -152,7 +162,7 @@ export default function DonorDetail() {
                 donorId: donorid,
                 bloodType: bloodType+bloodRhesus
               },
-              refetchQueries: [{query: GET_DONOR_DETAIL}]
+              refetchQueries: [{query: GET_DONOR_DETAIL, variables: { donorId: donorid } }]
             })
           }}
           >
@@ -285,28 +295,27 @@ export default function DonorDetail() {
               {
                 activitys.map((activity, index) => {
                   const {
-                    branch, donorType, interviewNotes, antibodyLevel,
+                    id, branch, donorType, interviewNotes, antibodyLevel,
                     didDonorAt, didDonor,
                     didBloodTestAt, didBloodTest,
                     didInterviewAt, didInterview,
                     didScheduleAt, didSchedule,
                   } = activity;
-                  activity.toggle = false;
                   return (
                     <>
-                      <TableRow>
+                      <TableRow key={activity.id}>
                         <TableCell value={++index} type="text"/>
                         <TableCell value={ParseDate(new Date(didDonorAt))} type="text"/>
                         <TableCell value={branch.branchName} type="text"/>
                         <TableCell value={donorType} type="text"/>
                         <TableCell className="text-center">
-                          <button onClick={() => setToggle(!toggle)}>
-                            <i className={"fas fa-chevron-"+(toggle ? "up" : "down")+" text-blueGray-500"}/>
+                          <button onClick={() => toggleDetail(activity.id)}>
+                            <i className={"fas fa-chevron-"+(shownDetails[activity.id] ? "up" : "down")+" text-blueGray-500"}/>
                           </button>
                         </TableCell>
                       </TableRow>
                       {
-                        activity.toggle
+                        shownDetails[activity.id]
                           ? <td colSpan={5}>
                             <div className="flex flex-auto">
                               <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
@@ -314,7 +323,7 @@ export default function DonorDetail() {
                                   CATATAN WAWANCARA
                                 </h1>
                                 <p>
-                                  {interviewNotes}
+                                  {interviewNotes !== null ? interviewNotes : "Tidak ada catatan"}
                                 </p>
                                 <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
                                   HASIL TES DARAH

@@ -19,8 +19,7 @@ const UserDropdown = () => {
 
   const router = useRouter()
   const logout = () => {
-    localStorage.setItem("currentUser", "");
-    localStorage.setItem("currentBranch", "");
+    localStorage.clear()
     router.push({pathname: "/"});
   }
 
