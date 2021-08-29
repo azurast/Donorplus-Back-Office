@@ -11,7 +11,7 @@ import React from "react";
 const TableCell = ({ type, value, buttonColor, buttonIcon, onButtonClick, onTdClick, children}) => {
   return (
     <td
-      className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      className="break-all border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       onClick={onTdClick}
     >
       {

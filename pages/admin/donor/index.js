@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { CalculateAge } from "../../../helpers/date-helper";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_DONORS, GET_ALL_BRANCH_DONORS } from "../../../services/graphql/queries/donorQueries";
-
+import { parseCookies } from "../../../helpers/parse-cookies";
+import Cookies from "js-cookie";
 // COMPONENTS
 import Admin from "layouts/Admin";
 import TableContainer from "../../../components/Table/TableContainer";
@@ -17,14 +18,12 @@ import TableHeader from "../../../components/Table/TableHeader";
 import TableBody from "../../../components/Table/TableBody";
 import TableCell from "../../../components/Table/TableCell";
 
-
-
 export default function Donors() {
-
   const router = useRouter();
-  const branchId = localStorage.getItem("currentBranch");
+  const [branchId, setBranchId] = useState(Cookies.get("branch"));
+
+  console.log('branchId', branchId);
   const { role } = router.query;
-  console.log('===role', role);
 
   const {data, loading, error} = role == "superadminpusat"
                                   ? useQuery(GET_ALL_DONORS)
@@ -99,6 +98,13 @@ export default function Donors() {
     </>
   );
 }
+
+// Donors.getInitialProps = ({ req }) => {
+//   const cookies = parseCookies(req)
+//   return {
+//     initialBranchId: cookies.branch
+//   }
+// }
 
 Donors.layout = Admin;
 

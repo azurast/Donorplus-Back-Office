@@ -14,8 +14,7 @@ const CheckboxInput = ({ label, ...props }) => {
       </label>
         <Field
             type="checkbox"
-           {...field}
-           {...props}
+            name={field.name}
         />
     </>
   );

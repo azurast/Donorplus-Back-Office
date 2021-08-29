@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_PLASMADONOR_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
 import { UPDATE_DONOR_PLASMA} from "../../../services/graphql/mutations/activityMutations";
 import { sendPushNotification } from "../../../services/push-notifications/push-notifications";
+import Cookies from "js-cookie";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -18,7 +19,7 @@ import TableCell from "../../../components/Table/TableCell";
 
 export default function PlasmaDonor() {
 
-    const branchId = localStorage.getItem("currentBranch");
+    const [branchId, setBranchId] = useState(Cookies.get("branch"));
 
     const { data, loading, error } = useQuery(GET_PLASMADONOR_ACTIVITIES, {
         variables: {

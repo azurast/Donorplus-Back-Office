@@ -12,6 +12,7 @@ import Table from "./Table";
 import TableCell from "./TableCell";
 import TableHead from "./TableHead";
 import RegularInput from "../Inputs/RegularInput";
+import DropdownInput from "../Inputs/DropdownInput";
 
 import { useMutation } from "@apollo/client";
 import { UPDATE_SCHEDULE } from "../../services/graphql/mutations/uddMutations";

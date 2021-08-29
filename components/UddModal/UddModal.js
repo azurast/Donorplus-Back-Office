@@ -9,11 +9,13 @@ import { GET_ALL_UDDS } from "../../services/graphql/queries/uddQueries";
 import RegularInput from "../Inputs/RegularInput";
 import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
+import DropdownInput from "../Inputs/DropdownInput";
 
 export default function UddModal({ showModal, setShowModal, modalType, udd }) {
 
   const mutation = modalType === "add" ? CREATE_UDD : UPDATE_UDD;
   const [createUdd, {data, loading, error}] = useMutation(mutation);
+  const options = ["Besar", "Kecil"]
 
   if (loading) {
     return <h2>Loading</h2>
@@ -40,18 +42,18 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                   uddAddress: udd.branchAddress || '',
                   uddLangitude: udd.langitude || '',
                   uddLongitude: udd.longitude || '',
-                  uddAvailability: udd.availability || "Tidak Tersedia"
+                  uddSize: udd.branchSize || options[0],
+                  uddAvailability: udd.availability || ''
                 }}
                 onSubmit={(values) => {
-                  const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddAvailability } = values;
+                  const { uddName, uddAddress, uddPhoneNumber, uddLangitude, uddLongitude, uddAvailability, uddSize } = values;
                   createUdd({
                     variables: {
                       branchId: udd.id,
                       branchName: uddName,
-                      branchSize: "Besar",
                       branchPhoneNumber: uddPhoneNumber,
                       branchAvailability: uddAvailability,
-                      // branchStatus: uddStatus,
+                      branchSize: uddSize,
                       branchAddress: uddAddress,
                       langitude: uddLangitude,
                       longitude: uddLongitude,
@@ -85,7 +87,7 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                           <div className="w-full lg:w-1 px-4">
                             <div className="relative w-full mb-3">
                               <RegularInput
-                                tType="text"
+                                type="text"
                                 name="uddName"
                                 label="Nama UDD"
                                 placeholder="Nama UDD"
@@ -124,10 +126,12 @@ export default function UddModal({ showModal, setShowModal, modalType, udd }) {
                                 name="uddAddress"
                                 placeholder="Jalan Gunung Merapi no 25.G"
                               />
-                              {/*<CheckboxInput*/}
-                              {/*  label="Keaktifan"*/}
-                              {/*  name="uddStatus"*/}
-                              {/*/>*/}
+                              <DropdownInput
+                                label="Ukuran"
+                                name="uddSize"
+                                id="uddSize"
+                                options={options}
+                              />
                             </div>
                           </div>
                         </div>

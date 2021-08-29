@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { GET_BLOODTEST_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
 import { UPDATE_BLOODTEST } from "../../../services/graphql/mutations/activityMutations";
 import { sendPushNotification } from "../../../services/push-notifications/push-notifications";
+import Cookies from "js-cookie";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -18,7 +19,7 @@ import TableCell from "../../../components/Table/TableCell";
 
 export default function BloodTest() {
 
-    const branchId = localStorage.getItem("currentBranch");
+    const [branchId, setBranchId] = useState(Cookies.get("branch"));
     const [antibody, setAntibody] = useState("");
 
     const { data, loading, error } = useQuery(GET_BLOODTEST_ACTIVITIES, {

@@ -88,7 +88,6 @@ export default function DonorDetail() {
     activitys
   } = pendonor;
 
-  console.log('===activities', activitys);
   const Stepper = ({status, label, date}) => {
     return (
       <div className="flex flex-row mb-2">
@@ -235,7 +234,7 @@ export default function DonorDetail() {
                   </h1>
                   {
                     donorsDetail.sex == "Perempuan"
-                        ? <RegularInput label="Pernah Hamil" name="riwayatHamil" disabled={true} showLabel={true}/>
+                        ? <li>{riwayatHamil}</li>
                         : <></>
                   }
                   {/* TODO : TURN INTO DROPDOWN */}

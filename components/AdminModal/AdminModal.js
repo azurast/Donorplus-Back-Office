@@ -9,12 +9,19 @@ import { GET_UDD_ADMINS } from "../../services/graphql/queries/uddQueries";
 import RegularInput from "../Inputs/RegularInput";
 import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
+import DropdownInput from "../Inputs/DropdownInput";
 
 export default function AdminModal({ showModal, setShowModal, modalType, admin }) {
 
   const mutation = modalType === "add" ? CREATE_ADMIN : UPDATE_ADMIN
   const [createAdmin, {data, loading, error}] = useMutation(mutation);
   const [status, setStatus] = useState(false);
+  const roles = {
+    "superadminpusat" : "Super Admin Pusat",
+    "superadmincabang" : "Super Admin Cabang",
+    "adminreguler" : "Admin Reguler"
+  }
+  const options = [roles.adminreguler, roles.superadmincabang, roles.superadminpusat];
 
   if (loading) {
     return <h2>Loading</h2>
@@ -110,16 +117,14 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                               showLabel={true}
                             />
                             {/* TODO : CREATE DROPDOWN */}
-                            <RegularInput
-                              inputType="text"
-                              name="adminRole"
-                              label="Role Admin"
-                              placeholder="Superadmin"
-                              showLabel={true}
+                            <DropdownInput
+                                label="Role Admin"
+                                name="adminRole"
+                                id="adminRole"
+                                options={options}
                             />
-                            {/* TODO : WRAP KE CHECKBOXINPUT.JS */}
-                            <Field
-                                type="checkbox"
+                            <CheckboxInput
+                                label="Keaktifan"
                                 name="adminStatus"
                             />
                           </div>

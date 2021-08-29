@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { createPopper } from "@popperjs/core";
+import Cookies from "js-cookie";
 
 const UserDropdown = () => {
   // dropdown props
@@ -19,7 +20,9 @@ const UserDropdown = () => {
 
   const router = useRouter()
   const logout = () => {
-    localStorage.clear()
+    Cookies.remove('role');
+    Cookies.remove('user');
+    Cookies.remove('branch');
     router.push({pathname: "/"});
   }
 

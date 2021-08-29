@@ -23,7 +23,6 @@ export default function Setting() {
 
     if (data) {
         allSchedule = data.getAllJadwal.slice();
-        // var test = allSchedule.slice()
         allSchedule.sort(function(a, b){
             return a.dayInt - b.dayInt;
         });
