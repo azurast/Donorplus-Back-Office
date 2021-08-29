@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_DONOR_DETAIL } from "../../../services/graphql/queries/donorQueries";
 import { UPDATE_DONORS_DETAIL } from "../../../services/graphql/mutations/donorMutations";
+import { ParseDate } from "../../../helpers/date-helper";
 import Admin from "../../../layouts/Admin";
 import Table from "../../../components/Table/Table";
 import TableHead from "../../../components/Table/TableHead";
@@ -24,6 +25,18 @@ export default function DonorDetail() {
   });
 
   const[updateDonor, { loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPDATE_DONORS_DETAIL)
+
+  const [shownDetails, setShownDetails] = useState({})
+
+  const toggleDetail = id => {
+    setShownDetails(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+    console.log('===shownDetails', shownDetails)
+  };
+
+
 
   if (loading || mutationLoading) {
     return <h2>Loading</h2>
@@ -125,7 +138,7 @@ export default function DonorDetail() {
             domisiliKecamatan,
             domisiliKelurahan,
             domisiliAddress,
-            riwayatHami : riwayatHamil ? "Ya" : "Tidak",
+            riwayatHamil : riwayatHamil ? "Ya" : "Tidak",
             riwayatCovid : riwayatCovid ? "Ya" : "Tidak",
             riwayatKeluhan,
             riwayatKomorbid,
@@ -148,19 +161,23 @@ export default function DonorDetail() {
                 donorId: donorid,
                 bloodType: bloodType+bloodRhesus
               },
-              refetchQueries: [{query: GET_DONOR_DETAIL}]
+              refetchQueries: [{query: GET_DONOR_DETAIL, variables: { donorId: donorid } }]
             })
           }}
           >
             <Form>
               <div className="flex flex-row">
-                <h1 className="font-semibold text-lg text-blueGray-700 pb-2">{fullName}</h1>
-                <button
-                  className={"bg-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
-                  type="submit"
-                >
-                  <i className="fas fa-save px-2 text-emerald-500"/>
-                </button>
+                <div className="flex w-1/2 justify-start">
+                  <h1 className="font-semibold text-lg text-blueGray-700 pb-2">{fullName}</h1>
+                </div>
+                <div className="flex w-1/2 justify-end">
+                  <button
+                    className={"bg-yellow-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
+                    type="submit"
+                  >
+                    <i className="fas fa-save px-2 text-white"/>
+                  </button>
+                </div>
               </div>
               <div className="divide-y">
                 <div>
@@ -217,7 +234,7 @@ export default function DonorDetail() {
                   </h1>
                   {
                     donorsDetail.sex == "Perempuan"
-                        ? <RegularInput label="Pernah Hamil" name="riwayatHamil" disabled={true} showLabel={true}/>
+                        ? <li>{riwayatHamil}</li>
                         : <></>
                   }
                   {/* TODO : TURN INTO DROPDOWN */}
@@ -270,49 +287,67 @@ export default function DonorDetail() {
                 <TableHead title="Nomor"/>
                 <TableHead title="Tanggal"/>
                 <TableHead title="Tempat"/>
-                <TableHead title="Jumlah Kantong"/>
+                <TableHead title="TipeDonor"/>
+                <TableHead title="Detail"/>
               </TableHeader>
               <TableBody>
-                {
-                  activitys.map(activity => {
-                    const { branch } = activity;
-                    return (
-                      <>
-                        <TableRow>
-                          <TableCell value="idx" type="text"/>
-                          <TableCell value="idx" type="text"/>
-                          <TableCell value={branch.branchName} type="text"/>
-                          <TableCell value="idx" type="text"/>
-                        </TableRow>
-                        <div className="flex flex-auto">
-                          <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              CATATAN WAWANCARA
-                            </h1>
-                            <p>
-                              dfnsdjfbdjshfbsdfjbsdjfbsdhjfbsdjfhbsdhjfbsjdfbsjdfhbjsh
-                            </p>
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              HASIL TES DARAH
-                            </h1>
-                            <p>
-                              {/*<Row label="Titer Antibodi" value="250"/>*/}
-                            </p>
-                            <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
-                              PERJALANAN
-                            </h1>
-                            <div className="flex flex-col">
-                              <Stepper label="Skrining Formulir" date="22/06/07" status={true} />
-                              <Stepper label="Wawancara" date="22/06/07" status={true} />
-                              <Stepper label="Tes Darah" date="22/06/07" status={true} />
-                              <Stepper label="Donor Darah" date="22/06/07" status={true} />
+              {
+                activitys.map((activity, index) => {
+                  const {
+                    id, branch, donorType, interviewNotes, antibodyLevel,
+                    didDonorAt, didDonor,
+                    didBloodTestAt, didBloodTest,
+                    didInterviewAt, didInterview,
+                    didScheduleAt, didSchedule,
+                  } = activity;
+                  return (
+                    <>
+                      <TableRow key={activity.id}>
+                        <TableCell value={++index} type="text"/>
+                        <TableCell value={ParseDate(new Date(didDonorAt))} type="text"/>
+                        <TableCell value={branch.branchName} type="text"/>
+                        <TableCell value={donorType} type="text"/>
+                        <TableCell className="text-center">
+                          <button onClick={() => toggleDetail(activity.id)}>
+                            <i className={"fas fa-chevron-"+(shownDetails[activity.id] ? "up" : "down")+" text-blueGray-500"}/>
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                      {
+                        shownDetails[activity.id]
+                          ? <td colSpan={5}>
+                            <div className="flex flex-auto">
+                              <div className="flex-1 rounded bg-blueGray-50 text-blueGray-500 px-6 py-6">
+                                <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
+                                  CATATAN WAWANCARA
+                                </h1>
+                                <p>
+                                  {interviewNotes !== null ? interviewNotes : "Tidak ada catatan"}
+                                </p>
+                                <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
+                                  HASIL TES DARAH
+                                </h1>
+                                <p>
+                                  {antibodyLevel}
+                                </p>
+                                <h1 className="text-lg text-blueGray-600 uppercase font-bold text-lg py-2">
+                                  PERJALANAN
+                                </h1>
+                                <div className="flex flex-col">
+                                  <Stepper label="Skrining Formulir" date={ParseDate(new Date(didScheduleAt))} status={didDonor} />
+                                  <Stepper label="Wawancara" date={ParseDate(new Date(didInterviewAt))} status={didInterview} />
+                                  <Stepper label="Tes Darah" date={ParseDate(new Date(didBloodTestAt))} status={didBloodTest} />
+                                  <Stepper label="Donor Darah" date={ParseDate(new Date(didDonorAt))} status={didDonor} />
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })
-                }
+                          </td>
+                          : <></>
+                      }
+                    </>
+                  );
+                })
+              }
               </TableBody>
             </Table>
         </div>

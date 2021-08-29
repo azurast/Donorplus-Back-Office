@@ -1,22 +1,22 @@
 import { gql } from "@apollo/client"
 
 const GET_ACTIVITY_STAGES_COUNT = gql`
-    query getActivityStagesCount{
-        getActivityForInterview {
+    query getActivityStagesCount($branchId: String!){
+        getActivityForInterview(branchId: $branchId) {
             id
         },
-        getActivityForBloodTest {
+        getActivityForBloodTest(branchId: $branchId) {
             id
         },
-        getActivityForDonor {
+        getActivityForDonor(branchId: $branchId) {
             id
         }
     }
 `
 
 const GET_INTERVIEW_ACTIVITIES = gql`
-    query getInterviewActivities{
-        getActivityForInterview {
+    query getInterviewActivities($branchId: String!){
+        getActivityForInterview(branchId: $branchId) {
             id
             didInterview
             didInterviewAt
@@ -24,6 +24,7 @@ const GET_INTERVIEW_ACTIVITIES = gql`
             passInterviewAt
             pendonor {
                 fullName
+                fcm_token
                 pendonorDetails {
                     sex
                     dateOfBirth
@@ -35,8 +36,8 @@ const GET_INTERVIEW_ACTIVITIES = gql`
 `
 
 const GET_BLOODTEST_ACTIVITIES = gql`
-    query getBloodTestActivities{
-        getActivityForBloodTest {
+    query getBloodTestActivities($branchId: String!){
+        getActivityForBloodTest(branchId: $branchId) {
             id
             didBloodTest
             didBloodTestAt
@@ -44,6 +45,7 @@ const GET_BLOODTEST_ACTIVITIES = gql`
             passBloodTestAt
             pendonor {
                 fullName
+                fcm_token
                 pendonorDetails {
                     sex
                     dateOfBirth
@@ -55,8 +57,8 @@ const GET_BLOODTEST_ACTIVITIES = gql`
 `
 
 const GET_PLASMADONOR_ACTIVITIES = gql`
-    query getDonorPlasmaActivities{
-        getActivityForDonor {
+    query getDonorPlasmaActivities($branchId: String!){
+        getActivityForDonor(branchId: $branchId) {
             id
             didScheduleTest
             didScheduleTestAt
@@ -64,6 +66,7 @@ const GET_PLASMADONOR_ACTIVITIES = gql`
             didDonorAt
             pendonor {
                 fullName
+                fcm_token
                 pendonorDetails {
                     sex
                     dateOfBirth

@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import Link from "next/link";
+import { CalculateAge } from "../../../helpers/date-helper";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_DONORS } from "../../../services/graphql/queries/donorQueries";
-
+import { GET_ALL_DONORS, GET_ALL_BRANCH_DONORS } from "../../../services/graphql/queries/donorQueries";
+import { parseCookies } from "../../../helpers/parse-cookies";
+import Cookies from "js-cookie";
 // COMPONENTS
 import Admin from "layouts/Admin";
 import TableContainer from "../../../components/Table/TableContainer";
@@ -15,15 +18,20 @@ import TableHeader from "../../../components/Table/TableHeader";
 import TableBody from "../../../components/Table/TableBody";
 import TableCell from "../../../components/Table/TableCell";
 
-import Link from "next/link";
-
 export default function Donors() {
-
   const router = useRouter();
-  const { role } = router.query;
-  console.log('===role', role);
+  const [branchId, setBranchId] = useState(Cookies.get("branch"));
 
-  const {data, loading, error} = useQuery(GET_ALL_DONORS);
+  console.log('branchId', branchId);
+  const { role } = router.query;
+
+  const {data, loading, error} = role == "superadminpusat"
+                                  ? useQuery(GET_ALL_DONORS)
+                                  : useQuery(GET_ALL_BRANCH_DONORS, {
+                                    variables: {
+                                      branchId: branchId
+                                    }
+                                  });
 
   if (loading) {
     return <h2>Loading</h2>
@@ -34,12 +42,11 @@ export default function Donors() {
     return null;
   }
 
-  const donors = data.getAllPendonor;
+  const donors = role == "superadminpusat"
+      ? data.getAllPendonor
+      : data.getAllPendonorByBranch;
+
   console.log("===donors", donors);
-
-  const convertToAge = (dateOfBirth) => {
-
-  }
 
   const onTableRowClick = (id) => {
     console.log('===kepencet with id', id);
@@ -72,7 +79,7 @@ export default function Donors() {
               donors.map((donor, index) => {
                 const {id, fullName, pendonorDetails} = donor;
                 const {sex, dateOfBirth, bloodType, nik} = pendonorDetails || {};
-                const age = dateOfBirth;
+                const age = CalculateAge(new Date(dateOfBirth))
                 return (
                   <TableRow key={id} onClick={() => onTableRowClick(id)}>
                     <TableCell value={++index} type="text"/>
@@ -91,6 +98,13 @@ export default function Donors() {
     </>
   );
 }
+
+// Donors.getInitialProps = ({ req }) => {
+//   const cookies = parseCookies(req)
+//   return {
+//     initialBranchId: cookies.branch
+//   }
+// }
 
 Donors.layout = Admin;
 

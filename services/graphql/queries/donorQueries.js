@@ -15,8 +15,23 @@ const GET_ALL_DONORS = gql`
   }
 `
 
+const GET_ALL_BRANCH_DONORS = gql`
+  query getAllDonorsByBranch($branchId: String!) {
+    getAllPendonorByBranch(branchId: $branchId) {
+      id
+      fullName
+      pendonorDetails {
+        sex
+        dateOfBirth
+        bloodType
+        nik
+      }
+    }
+  }
+`
+
 const GET_DONOR_DETAIL = gql`
-  query getAllDonors($donorId: String!) {
+  query getDonorDetail($donorId: String!) {
     getPendonorDetail(pendonorId: $donorId) {
       id
       pendonor {
@@ -24,9 +39,23 @@ const GET_DONOR_DETAIL = gql`
         phoneNumber
         email
         activitys {
+          id
           branch {
             branchName
           }
+          donorType
+          interviewNotes
+          antibodyLevel
+          didDonorAt
+          didDonor
+          didBloodTestAt
+          didBloodTest
+          didInterviewAt
+          didInterview
+          didScheduleAt
+          didSchedule
+          antibodyLevel
+          interviewNotes
         }
       }
       sex
@@ -61,5 +90,6 @@ const GET_DONOR_DETAIL = gql`
 
 export {
   GET_ALL_DONORS,
+  GET_ALL_BRANCH_DONORS,
   GET_DONOR_DETAIL
 }

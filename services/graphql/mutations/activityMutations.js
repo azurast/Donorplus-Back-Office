@@ -99,6 +99,7 @@ const UPDATE_INTERVIEW = gql`
             pendonor {
                 fullName
             }
+            didInterviewAt
         }
     }
 `
@@ -124,6 +125,7 @@ const UPDATE_BLOODTEST = gql`
             pendonor {
                 fullName
             }
+            passBloodTestAt
         }
     }
 `
@@ -146,6 +148,7 @@ const UPDATE_DONOR_PLASMA = gql`
             pendonor {
                 fullName
             }
+            didDonorAt
         }
     }
 `

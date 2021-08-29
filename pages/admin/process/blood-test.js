@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_BLOODTEST_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
 import { UPDATE_BLOODTEST } from "../../../services/graphql/mutations/activityMutations";
+import { sendPushNotification } from "../../../services/push-notifications/push-notifications";
+import Cookies from "js-cookie";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -17,8 +19,14 @@ import TableCell from "../../../components/Table/TableCell";
 
 export default function BloodTest() {
 
+    const [branchId, setBranchId] = useState(Cookies.get("branch"));
     const [antibody, setAntibody] = useState("");
-    const { data, loading, error } = useQuery(GET_BLOODTEST_ACTIVITIES);
+
+    const { data, loading, error } = useQuery(GET_BLOODTEST_ACTIVITIES, {
+        variables: {
+            branchId: branchId
+        }
+    });
 
     const [updateBloodTest, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(UPDATE_BLOODTEST)
 
@@ -35,9 +43,10 @@ export default function BloodTest() {
 
     console.log('===bloodtest list', listBloodTest);
 
-    const onActionButtonClick = (activityId, passBloodTest) => {
+    const onActionButtonClick = (activityId, passBloodTest, fcmToken) => {
         const timestamp = new Date().toISOString();
         console.log('===timestamp', timestamp);
+        const type = passBloodTest ? "bloodtestSuccess" : "bloodtestFailed"
         updateBloodTest({
             variables: {
                 activityId: activityId,
@@ -47,11 +56,17 @@ export default function BloodTest() {
                 passBloodTestStatus: passBloodTest,
                 passBloodTestShow: true,
             },
-            refetchQueries: [{query: GET_BLOODTEST_ACTIVITIES}]
-        })
+            refetchQueries: [{
+                query: GET_BLOODTEST_ACTIVITIES,
+                variables: {
+                    branchId: branchId
+                }
+            }]
+        });
+        sendPushNotification(fcmToken, type)
     };
 
-    const ActionButtons = ({activityId, passBloodTestStatus}) => {
+    const ActionButtons = ({activityId, passBloodTestStatus, fcmToken}) => {
 
         return(
           <td
@@ -59,20 +74,20 @@ export default function BloodTest() {
             onClick={(e) => e.stopPropagation()}
           >
               <button
-                className={(passBloodTestStatus !== null ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={(passBloodTestStatus == true ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
-                    if (passBloodTestStatus == null) {
-                        onActionButtonClick(activityId,true)
+                    if (passBloodTestStatus == false) {
+                        onActionButtonClick(activityId, true, fcmToken)
                     }
                 }}
               >
                   Lolos
               </button>
               <button
-                className={(passBloodTestStatus !== null ? "cursor-not-allowed bg-red-400 active:bg-red-500 " : "bg-red-500 active:bg-red-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={(passBloodTestStatus == true ? "cursor-not-allowed bg-red-400 active:bg-red-500 " : "bg-red-500 active:bg-red-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
-                    if (passBloodTestStatus == null) {
-                        onActionButtonClick(activityId,false)
+                    if (passBloodTestStatus == false) {
+                        onActionButtonClick(activityId, false, fcmToken)
                     }
                 }}
               >
@@ -90,10 +105,10 @@ export default function BloodTest() {
               <input
                 type={type}
                 value={antibody}
+                autoFocus="autoFocus"
                 className={ (disabled === true ? "bg-blueGray-100 " : "bg-white ") + (size === "small" ? "px-2 py-1" : "px-3 py-3") + " placeholder-blueGray-300 text-blueGray-600 relative rounded text-sm border border-blueGray-300 outline-none focus:outline-none focus:shadow-outline w-full"}
                 onChange={(e) => {
                     e.preventDefault();
-                    // console.log('===e.target.value', e.target.value);
                     setAntibody(e.target.value);
                 }}
               />
@@ -124,7 +139,7 @@ export default function BloodTest() {
                       {
                           listBloodTest.map((activity, index) => {
                               const { id, didBloodTest, didBloodTestAt, passBloodTest, passBloodTestAt, pendonor, antibodyLevel } = activity;
-                              const { fullName, pendonorDetails: { sex, dateOfBirth, bloodType }} = pendonor;
+                              const { fullName, fcm_token, pendonorDetails: { sex, dateOfBirth, bloodType }} = pendonor;
                               const date = new Date(didBloodTestAt).toTimeString().slice(0,5);
                               const status = !didBloodTest
                                 ? "Menunggu Tes Darah"
@@ -140,7 +155,7 @@ export default function BloodTest() {
                                     <TableCell value={bloodType} type="text"/>
                                     <TableCell value={status} type="label"/>
                                     <InputCell disabled={passBloodTest !== null} type="text"/>
-                                    <ActionButtons activityId={id} passBloodTestStatus={passBloodTest}/>
+                                    <ActionButtons activityId={id} passBloodTestStatus={passBloodTest} fcmToken={fcm_token}/>
                                 </TableRow>
                               );
                           })

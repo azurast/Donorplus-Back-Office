@@ -12,6 +12,7 @@ import Table from "./Table";
 import TableCell from "./TableCell";
 import TableHead from "./TableHead";
 import RegularInput from "../Inputs/RegularInput";
+import DropdownInput from "../Inputs/DropdownInput";
 
 import { useMutation } from "@apollo/client";
 import { UPDATE_SCHEDULE } from "../../services/graphql/mutations/uddMutations";
@@ -23,6 +24,16 @@ export default function SlotTable({ schedule }) {
 
   const handleEditMode = () => {
     setIsEditing(!isEditing);
+  }
+
+  const days = {
+      "Sunday" : "Minggu",
+      "Monday" : "Senin",
+      "Tuesday" : "Selasa",
+      "Wednesday" : "Rabu",
+      "Thursday" : "Kamis",
+      "Friday" : "Jum'at",
+      "Saturday" : "Sabtu"
   }
 
   const [updateSchedule, { loading, error, data }] = useMutation(UPDATE_SCHEDULE);
@@ -44,19 +55,19 @@ export default function SlotTable({ schedule }) {
               timeslot: schedule.timeslot,
               open: schedule.open
           }}
-          // validationSchema={
-          //     Yup.object().shape({
-          //       timeslot: Yup.object().shape(
-          //           Yup.array().of(
-          //               Yup.object().shape({
-          //                   name: Yup.string(),
-          //                   occupied: Yup.number(),
-          //                   totalSlot: Yup.number().moreThan(Yup.ref('occupied'))
-          //               })
-          //           )
-          //       ),
-          //     })
-          // }
+          validationSchema={
+              Yup.object().shape({
+                  timeslot: Yup.object().shape({
+                      slot: Yup.array().of(
+                          Yup.object().shape({
+                              name: Yup.string(),
+                              occupied: Yup.number(),
+                              totalSlot: Yup.number().required("Total slot tidak boleh kurang dari occupied").moreThan(Yup.ref('occupied'))
+                          })
+                      )
+                  })
+              })
+          }
           onSubmit={ values => {
               // alert(JSON.stringify(values, null, 2));
               const { timeslot, open } = values;
@@ -77,7 +88,7 @@ export default function SlotTable({ schedule }) {
                     className="relative flex flex-col break-words w-full mb-6 shadow-lg rounded bg-white mr-4"
                   >
                     <TableTitle
-                      titleText={schedule.day}
+                      titleText={days.[schedule.day]}
                       showButton={true}
                       buttonText={isEditing ? "Simpan" : "Ubah"}
                       buttonColor={schedule.editable ? "yellow" : null}
@@ -119,11 +130,11 @@ export default function SlotTable({ schedule }) {
                                     return (
                                       <TableRow key={each.name}>
                                         <TimeTableCell value={each.name}/>
-                                        { isEditing
-                                            ?   <td>
-                                                <RegularInput name={`timeslot.slot.${[index]}.totalSlot`} inputtype="number" showLabel={false} size="small"/>
-                                                </td>
-                                            : <TableCell value={val}/> }
+                                        {
+                                            isEditing
+                                           ? <td><RegularInput name={`timeslot.slot.${[index]}.totalSlot`} type="number" showLabel={false} size="small"/></td>
+                                           : <TableCell value={val}/>
+                                        }
                                       </TableRow>
                                     );
                                   })

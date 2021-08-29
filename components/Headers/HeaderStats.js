@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ACTIVITY_STAGES_COUNT } from "../../services/graphql/queries/activityQueries";
+import Cookies from "js-cookie";
 
 // components
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats({ showCards }) {
 
-  const { data, loading, error } = useQuery(GET_ACTIVITY_STAGES_COUNT);
+  const [branchId, setBranchId] = useState(Cookies.get("branch"));
+
+  const { data, loading, error } = useQuery(GET_ACTIVITY_STAGES_COUNT, {
+    variables: {
+      branchId: branchId
+    }
+  });
 
   if (loading) {
     return <h2>Loading</h2>

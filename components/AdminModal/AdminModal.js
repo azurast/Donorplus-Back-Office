@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types"
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { useMutation } from "@apollo/client";
 import { CREATE_ADMIN, UPDATE_ADMIN } from "../../services/graphql/mutations/uddMutations";
 import { GET_UDD_ADMINS } from "../../services/graphql/queries/uddQueries";
@@ -9,12 +9,19 @@ import { GET_UDD_ADMINS } from "../../services/graphql/queries/uddQueries";
 import RegularInput from "../Inputs/RegularInput";
 import TextareaInput from "../Inputs/TextareaInput";
 import CheckboxInput from "../Inputs/CheckboxInput";
+import DropdownInput from "../Inputs/DropdownInput";
 
 export default function AdminModal({ showModal, setShowModal, modalType, admin }) {
 
   const mutation = modalType === "add" ? CREATE_ADMIN : UPDATE_ADMIN
   const [createAdmin, {data, loading, error}] = useMutation(mutation);
-  const [status, setStatus] = useState(admin.status);
+  const [status, setStatus] = useState(false);
+  const roles = {
+    "superadminpusat" : "Super Admin Pusat",
+    "superadmincabang" : "Super Admin Cabang",
+    "adminreguler" : "Admin Reguler"
+  }
+  const options = [roles.adminreguler, roles.superadmincabang, roles.superadminpusat];
 
   if (loading) {
     return <h2>Loading</h2>
@@ -29,6 +36,7 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
     <>
       {showModal ? (
         <>
+          <div className="flex fixed inset-0 z-40 bg-black w-full h-full opacity-80 left-0 top-0"></div>
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto md:px-10 fixed inset-0 z-50 outline-none focus:outline-none"
           >
@@ -41,7 +49,6 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                 adminStatus: admin.status || false
               }}
               onSubmit={(values, { setSubmitting }) => {
-                // alert(JSON.stringify(values, null, 2));
                 const { adminName, adminEmail, adminPassword, adminRole, adminStatus } = values;
                 createAdmin({
                   variables: {
@@ -74,7 +81,9 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                       </h3>
                       <button
                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => {
+                          setShowModal(false)
+                        }}
                       >
                         <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                           ×
@@ -91,32 +100,32 @@ export default function AdminModal({ showModal, setShowModal, modalType, admin }
                               name="adminName"
                               label="Nama Admin"
                               placeholder="Nama Admin"
+                              showLabel={true}
                             />
                             <RegularInput
                               inputType="email"
                               name="adminEmail"
                               label="Email Admin"
                               placeholder="test@example.com"
+                              showLabel={true}
                             />
                             <RegularInput
                               inputType="password"
                               name="adminPassword"
                               label="Password Admin"
                               placeholder="********"
+                              showLabel={true}
                             />
                             {/* TODO : CREATE DROPDOWN */}
-                            <RegularInput
-                              inputType="text"
-                              name="adminRole"
-                              label="Role Admin"
-                              placeholder="Superadmin"
+                            <DropdownInput
+                                label="Role Admin"
+                                name="adminRole"
+                                id="adminRole"
+                                options={options}
                             />
-                            {/* TODO : SPREAD STATUS */}
                             <CheckboxInput
-                              label="Keaktifan"
-                              name="adminStatus"
-                              checked={status}
-                              onChange={() => setStatus(!status)}
+                                label="Keaktifan"
+                                name="adminStatus"
                             />
                           </div>
                         </div>

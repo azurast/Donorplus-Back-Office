@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types"
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_INTERVIEW_ACTIVITIES } from "../../../services/graphql/queries/activityQueries";
 import { UPDATE_INTERVIEW } from "../../../services/graphql/mutations/activityMutations";
+import { sendPushNotification } from "../../../services/push-notifications/push-notifications";
+import Cookies from "js-cookie";
 
 // COMPONENTS
 import Admin from "layouts/Admin"
@@ -17,7 +19,13 @@ import TableCell from "../../../components/Table/TableCell";
 
 export default function Interview() {
 
-    const { data, loading, error } = useQuery(GET_INTERVIEW_ACTIVITIES);
+    const [branchId, setBranchId] = useState(Cookies.get("branch"));
+
+    const { data, loading, error } = useQuery(GET_INTERVIEW_ACTIVITIES, {
+        variables: {
+            branchId: branchId
+        }
+    });
 
     const [updateInterview, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(UPDATE_INTERVIEW)
 
@@ -34,8 +42,11 @@ export default function Interview() {
 
     console.log('===interview list', listInterview);
 
-    const onActionButtonClick = (activityId, passInterview) => {
+    const onActionButtonClick = (activityId, passInterview, fcmToken) => {
         const timestamp = new Date().toISOString();
+        // console.log('===timeStamp', timestamp);
+        // console.log('===typeof(timeStamp)', typeof (timestamp));
+        const type = passInterview ? "interviewSuccess" : "interviewFailed"
         updateInterview({
             variables: {
                 activityId: activityId,
@@ -44,32 +55,37 @@ export default function Interview() {
                 passInterviewStatus: passInterview,
                 passInterviewShow: true,
             },
-            refetchQueries: [{query: GET_INTERVIEW_ACTIVITIES}]
-        })
+            refetchQueries: [{
+                query: GET_INTERVIEW_ACTIVITIES,
+                variables: {
+                    branchId: branchId
+                }
+            }]
+        });
+        sendPushNotification(fcmToken, type)
     };
 
-    const ActionButtons = ({activityId, passInterviewStatus}) => {
-
+    const ActionButtons = ({activityId, passInterviewStatus, fcmToken}) => {
         return(
           <td
             className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
             onClick={(e) => e.stopPropagation()}
           >
               <button
-                className={(passInterviewStatus !== null ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={(passInterviewStatus == true ? "cursor-not-allowed bg-blueGray-400 active:bg-blueGray-500 " : "bg-emerald-500 active:bg-emerald-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
-                    if (passInterviewStatus == null) {
-                        onActionButtonClick(activityId,true)
+                    if (passInterviewStatus == false) {
+                        onActionButtonClick(activityId, true, fcmToken)
                     }
                 }}
               >
                   Lolos
               </button>
               <button
-                className={(passInterviewStatus !== null ? "cursor-not-allowed bg-red-400 active:bg-red-500 " : "bg-red-500 active:bg-red-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
+                className={(passInterviewStatus == true ? "cursor-not-allowed bg-red-400 active:bg-red-500 " : "bg-red-500 active:bg-red-500 ")+"get-started text-white font-bold px-3 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"}
                 onClick={() => {
-                    if (passInterviewStatus == null) {
-                        onActionButtonClick(activityId,false)
+                    if (passInterviewStatus == false) {
+                        onActionButtonClick(activityId, false, fcmToken)
                     }
                 }}
               >
@@ -86,7 +102,9 @@ export default function Interview() {
                 <TableTitle
                   titleText="Daftar Pendonor Wawancara"
                   showButton={false}
-                />
+                >
+                    {/*<button onClick={(e) => sendPushNotification(e, "fdxRm0ySXkykmkkr5UZgJM:APA91bFXEF-kmCHPlsASUBfkdj3j6jC1E0_jh3ktR4lJdIyeSKZr4s0cjSLs5Vdc4l3iRPVCw9l4-_0s9wTMuQ-xWum6BBNpyAKpTS1geHO-x3BhMATdNzKOvrxgwM0QfTyU1Urcz1kL", "interviewSuccess")}>TEST</button>*/}
+                </TableTitle>
                 <Table>
                     <TableHeader>
                         <TableHead title="Nomor Antrian"/>
@@ -102,7 +120,7 @@ export default function Interview() {
                         {
                             listInterview.map((activity, index) => {
                                 const { id, didInterview, didInterviewAt, passInterview, passInterviewAt, pendonor } = activity;
-                                const { fullName, pendonorDetails: { sex, dateOfBirth, bloodType }} = pendonor;
+                                const { fullName, fcm_token, pendonorDetails: { sex, dateOfBirth, bloodType }} = pendonor;
                                 const date = new Date(didInterviewAt).toTimeString().slice(0,5);
                                 const status = !didInterview
                                   ? "Menunggu Interview"
@@ -118,7 +136,7 @@ export default function Interview() {
                                       <TableCell value={bloodType} type="text"/>
                                       <TableCell value={status} type="label"/>
                                       {/* TODO : add button that opens modal to update interview notes*/}
-                                      <ActionButtons activityId={id} passInterviewStatus={passInterview}/>
+                                      <ActionButtons activityId={id} passInterviewStatus={passInterview} fcmToken={fcm_token}/>
                                   </TableRow>
                                 );
                             })

@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router"
+import { useQuery, useLazyQuery } from "@apollo/client"
+import { LOGIN } from "../services/graphql/queries/uddQueries";
+import { Formik, Form } from "formik";
+import * as Yup from 'yup';
+import Cookies from "js-cookie";
+import { parseCookies } from "../helpers/parse-cookies";
+import RegularInput from "../components/Inputs/RegularInput";
+
 // import { authenticationService } from "../services/authentication.service";
 
 // layout for page
@@ -14,26 +22,48 @@ function Redirect({ to }) {
     router.push(to);
   }, [to]);
 }
-export default function Index() {
 
-  const login = () => {
-    // TODO : authenticate to BE & return role
-    localStorage.setItem("currentUser", "superadmincabang");
-  }
+export default function Index({ initialAdmin }) {
 
   const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [redirectPath, setRedirectPath] = useState("udd")
-  const handleLogin = (e) => {
-    e.preventDefault()
-    login();
-    const role = localStorage.getItem("currentUser");
-    /* TODO :
-        - authenticate login, exception handling
-        -determine redirect path based on role
-        */
-    // router.push("admin/udd");
-    router.push({pathname: "admin/udd", query: { role }});
+
+  const [loginAdmin, { loading, error, data}] = useLazyQuery(
+      LOGIN, {
+        variables: {
+          email: email,
+          password: password,
+        },
+      }
+  );
+
+  if (error) {
+    console.error(error);
   }
+
+  if (loading) {
+    return <h2>Loading</h2>
+  }
+
+  if (data) {
+    // alert(JSON.stringify(data, null, 2));
+    const currentAdmin = data.login;
+    if (currentAdmin !== null) {
+      if (currentAdmin.status == false) {
+        alert("Status anda tidak aktif, mohon hubungin superadmin PMI anda")
+        setEmail("")
+        setPassword("")
+      } else {
+        Cookies.set("role", currentAdmin.role);
+        Cookies.set("user", currentAdmin.id);
+        Cookies.set("branch", currentAdmin.branch.id);
+        router.push({pathname: "admin/udd", query: { role: currentAdmin.role }});
+      }
+    }
+  }
+
 
   return (
     <>
@@ -48,58 +78,44 @@ export default function Index() {
                   </h6>
                 </div>
               </div>
-              <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <form>
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
-                    />
-                  </div>
-
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div>
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                      />
-                      <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        Remember me
-                      </span>
-                    </label>
-                  </div>
-                  <div className="text-center mt-6">
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: ""
+                }}
+                validationSchema={
+                  Yup.object().shape({
+                    email: Yup.string().email().required(),
+                    password: Yup.string().required()
+                  })
+                }
+                onSubmit={values => {
+                  // alert(JSON.stringify(values, null, 2));
+                  setEmail(values.email)
+                  setPassword(values.password)
+                  loginAdmin()
+                }}
+              >
+                <Form>
+                  <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <div className="relative w-full mb-3">
+                      <RegularInput label="email" name="email" type="email" showLabel={true}/>
+                    </div>
+                    <div className="relative w-full mb-3">
+                      <RegularInput label="Password" name="password" type="password" showLabel={true}/>
+                    </div>
+                    <div className="text-center mt-6">
                       <button
-                        className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={handleLogin}
+                          className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+                          type="submit"
+                          // onClick={handleLogin}
                       >
                         Sign In
                       </button>
+                    </div>
                   </div>
-                </form>
-              </div>
+                </Form>
+              </Formik>
             </div>
           </div>
         </div>
